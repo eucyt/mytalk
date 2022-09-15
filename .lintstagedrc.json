@@ -1,0 +1,4 @@
+{
+  "*": "prettier --cache --ignore-path .gitignore --ignore-unknown --write",
+  "*.{ts,tsx}": "eslint --max-warnings 0 --cache --cache-location ./node_modules/.cache/eslint --ignore-path .gitignore --fix"
+}

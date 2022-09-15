@@ -13,6 +13,24 @@
   },
   "scripts": {
     "front": "yarn workspace frontend",
-    "back": "yarn workspace backend"
+    "back": "yarn workspace backend",
+    "lint:fix": "yarn prettier:fix && yarn eslint:fix",
+    "lint:check": "yarn prettier:check && yarn eslint:check",
+    "eslint:fix": "eslint --max-warnings 0 --cache --cache-location ./node_modules/.cache/eslint --ignore-path .gitignore --fix .",
+    "prettier:fix": "prettier --cache --ignore-path .gitignore --write .",
+    "postinstall": "husky install"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "eslint": "8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.31.8",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1"
   }
 }

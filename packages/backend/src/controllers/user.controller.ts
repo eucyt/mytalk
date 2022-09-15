@@ -1,30 +1,37 @@
-import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
+import {
+  Controller,
+  Param,
+  Body,
+  Get,
+  Post,
+  Put,
+  Delete,
+} from "routing-controllers";
 
 @Controller("/users")
-export class UserController {
-
+export default class UserController {
   @Get("/")
-  getAll() {
+  getAll(): string {
     return "This action returns all users";
   }
 
   @Get("/:id")
-  getOne(@Param("id") id: number) {
-    return "This action returns user #" + id;
+  getOne(@Param("id") id: number): string {
+    return "This action returns user #" + id.toString();
   }
 
   @Post("")
-  post(@Body() user: any) {
+  post(@Body() user: any): string {
     return "Saving user...";
   }
 
   @Put("/:id")
-  put(@Param("id") id: number, @Body() user: any) {
+  put(@Param("id") id: number, @Body() user: any): string {
     return "Updating a user...";
   }
 
   @Delete("/:id")
-  remove(@Param("id") id: number) {
+  remove(@Param("id") id: number): string {
     return "Removing user...";
   }
 }

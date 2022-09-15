@@ -1,4 +1,3 @@
-export async function get(){
-  return {
-  }
+export async function get(): Promise<{}> {
+  return {};
 }
