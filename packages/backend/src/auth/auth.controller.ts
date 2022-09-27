@@ -1,5 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import {
+  AccessTokenRequest,
+  AccessTokenResponse,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
@@ -24,5 +26,12 @@ export class AuthController {
   @Post('/login')
   async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
     return this.authService.login(loginRequest.email, loginRequest.password);
+  }
+
+  @Post('/accessToken')
+  async accessToken(
+    @Body() accessTokenRequest: AccessTokenRequest,
+  ): Promise<AccessTokenResponse> {
+    return this.authService.renewAccessToken(accessTokenRequest.refreshToken);
   }
 }

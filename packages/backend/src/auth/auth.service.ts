@@ -1,7 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { compare, hash } from 'bcrypt';
-import { LoginResponse, RegisterResponse } from './auth.entity';
+import {
+  AccessTokenResponse,
+  LoginResponse,
+  RegisterResponse,
+} from './auth.entity';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +38,12 @@ export class AuthService {
     return {
       accessToken: 'todo',
       refreshToken: 'todo',
+    };
+  }
+
+  async renewAccessToken(refreshToken: string): Promise<AccessTokenResponse> {
+    return {
+      accessToken: refreshToken + 'todo',
     };
   }
 }

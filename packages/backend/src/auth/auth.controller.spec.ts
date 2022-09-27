@@ -32,7 +32,7 @@ describe('AuthController', () => {
     };
     jest.spyOn(authService, 'register').mockImplementation(async () => result);
 
-    expect(await controller.register(user)).toBe(result);
+    expect(await controller.register(user)).toEqual(result);
   });
 
   it('should login', async () => {
@@ -46,6 +46,19 @@ describe('AuthController', () => {
     };
     jest.spyOn(authService, 'login').mockImplementation(async () => result);
 
-    expect(await controller.login(user)).toBe(result);
+    expect(await controller.login(user)).toEqual(result);
+  });
+
+  it('should get access token by refresh token', async () => {
+    const accessToken = 'access_token';
+    const refreshToken = 'refresh_token';
+
+    jest
+      .spyOn(authService, 'renewAccessToken')
+      .mockImplementation(async () => ({ accessToken }));
+
+    expect(await controller.accessToken({ refreshToken })).toEqual({
+      accessToken,
+    });
   });
 });
