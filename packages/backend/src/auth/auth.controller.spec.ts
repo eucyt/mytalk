@@ -34,4 +34,18 @@ describe('AuthController', () => {
 
     expect(await controller.register(user)).toBe(result);
   });
+
+  it('should login', async () => {
+    const user = {
+      email: 'test@test.com',
+      password: 'Password',
+    };
+    const result = {
+      accessToken: 'access_token',
+      refreshToken: 'refresh_token',
+    };
+    jest.spyOn(authService, 'login').mockImplementation(async () => result);
+
+    expect(await controller.login(user)).toBe(result);
+  });
 });

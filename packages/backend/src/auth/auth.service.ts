@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { hash } from 'bcrypt';
-import { RegisterResponse } from './auth.entity';
+import { compare, hash } from 'bcrypt';
+import { LoginResponse, RegisterResponse } from './auth.entity';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +14,23 @@ export class AuthService {
         password: await hash(password, 10),
       },
     });
+    return {
+      accessToken: 'todo',
+      refreshToken: 'todo',
+    };
+  }
+
+  async login(email: string, password: string): Promise<LoginResponse> {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user || compare(password, user.password)) {
+      throw new UnauthorizedException('Email or password is invalid');
+    }
+
     return {
       accessToken: 'todo',
       refreshToken: 'todo',

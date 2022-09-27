@@ -1,5 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { RegisterRequest, RegisterResponse } from './auth.entity';
+import {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+} from './auth.entity';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -14,5 +19,10 @@ export class AuthController {
       registerRequest.email,
       registerRequest.password,
     );
+  }
+
+  @Post('/login')
+  async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
+    return this.authService.login(loginRequest.email, loginRequest.password);
   }
 }

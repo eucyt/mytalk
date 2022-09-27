@@ -13,3 +13,17 @@ export class RegisterResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export class LoginRequest {
+  @IsEmail()
+  email!: string;
+
+  @IsAscii()
+  @Length(6, 1024)
+  password!: string;
+}
+
+export class LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+}
