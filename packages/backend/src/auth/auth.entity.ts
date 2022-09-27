@@ -10,6 +10,6 @@ export class RegisterRequest {
 }
 
 export class RegisterResponse {
-  id: number;
-  email: string;
+  accessToken: string;
+  refreshToken: string;
 }

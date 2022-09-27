@@ -27,8 +27,8 @@ describe('AuthController', () => {
       password: 'Password',
     };
     const result = {
-      id: 12345,
-      email: user.email,
+      accessToken: 'access_token',
+      refreshToken: 'refresh_token',
     };
     jest.spyOn(authService, 'register').mockImplementation(async () => result);
 

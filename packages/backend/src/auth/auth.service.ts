@@ -8,15 +8,15 @@ export class AuthService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async register(email: string, password: string): Promise<RegisterResponse> {
-    const user = await this.prismaService.user.create({
+    await this.prismaService.user.create({
       data: {
         email,
         password: await hash(password, 10),
       },
     });
     return {
-      id: user.id,
-      email: user.email,
+      accessToken: 'todo',
+      refreshToken: 'todo',
     };
   }
 }
