@@ -1,6 +1,9 @@
 import { IsAscii, IsEmail, Length } from 'class-validator';
 
 export class RegisterRequest {
+  @Length(3, 12)
+  displayName!: string;
+
   @IsEmail()
   email!: string;
 

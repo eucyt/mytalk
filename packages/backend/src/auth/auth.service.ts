@@ -11,9 +11,14 @@ import {
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async register(email: string, password: string): Promise<RegisterResponse> {
+  async register(
+    displayName: string,
+    email: string,
+    password: string,
+  ): Promise<RegisterResponse> {
     await this.prismaService.user.create({
       data: {
+        displayName,
         email,
         password: await hash(password, 10),
       },

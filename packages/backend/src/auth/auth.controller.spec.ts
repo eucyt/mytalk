@@ -23,6 +23,7 @@ describe('AuthController', () => {
 
   it('should register', async () => {
     const user = {
+      displayName: 'test user',
       email: 'test@test.com',
       password: 'Password',
     };

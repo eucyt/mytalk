@@ -18,6 +18,7 @@ export class AuthController {
     @Body() registerRequest: RegisterRequest,
   ): Promise<RegisterResponse> {
     return this.authService.register(
+      registerRequest.displayName,
       registerRequest.email,
       registerRequest.password,
     );
