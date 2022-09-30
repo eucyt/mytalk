@@ -36,7 +36,7 @@ export class AuthService {
       },
     });
 
-    if (!user || compare(password, user.password)) {
+    if (!user || !compare(password, user.password)) {
       throw new UnauthorizedException('Email or password is invalid');
     }
 
@@ -50,5 +50,10 @@ export class AuthService {
     return {
       accessToken: refreshToken + 'todo',
     };
+  }
+
+  async validateUser(email: string, password: string) {
+    const user = await this.prismaService.user.findUnique({ where: { email } });
+    return user && compare(password, user.password);
   }
 }
