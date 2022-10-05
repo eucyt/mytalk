@@ -21,4 +21,12 @@ export class UserService {
       data: { password: await hash(password, 10), ...remaining },
     });
   }
+
+  async update(user: User) {
+    const { id, password, ...remaining } = user;
+    return this.prismaService.user.update({
+      where: { id },
+      data: { password: await hash(password, 10), ...remaining },
+    });
+  }
 }
