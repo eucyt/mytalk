@@ -31,8 +31,18 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
+  it('should find user', async () => {
+    const result = await service.find(id);
+
+    expect(result.id).toEqual(id);
+    expect(result.displayName).toEqual(displayName);
+    expect(result.email).toEqual(email);
+    expect(await compare(password, result.password)).toEqual(true);
+  });
+
   it('should find user by email', async () => {
     const result = await service.findByEmail(email);
+
     expect(result.id).toEqual(id);
     expect(result.displayName).toEqual(displayName);
     expect(result.email).toEqual(email);
