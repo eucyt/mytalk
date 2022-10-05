@@ -19,12 +19,14 @@ describe('UserService', () => {
 
     service = module.get<UserService>(UserService);
     prismaService = module.get<PrismaService>(PrismaService);
-    prismaService.user.findUnique = jest.fn().mockReturnValueOnce({
+    const user = {
       id: 12345,
       displayName: 'test user',
       email,
       password: await bcrypt.hash(password, 10),
-    });
+    };
+    prismaService.user.findUnique = jest.fn().mockReturnValueOnce(user);
+    prismaService.user.create = jest.fn().mockReturnValueOnce(user);
   });
 
   it('should be defined', () => {
@@ -42,6 +44,19 @@ describe('UserService', () => {
 
   it('should find user by email', async () => {
     const result = await service.findByEmail(email);
+
+    expect(result.id).toEqual(id);
+    expect(result.displayName).toEqual(displayName);
+    expect(result.email).toEqual(email);
+    expect(await compare(password, result.password)).toEqual(true);
+  });
+
+  it('should create user', async () => {
+    const result = await service.create({
+      displayName: 'test user',
+      email,
+      password: password,
+    });
 
     expect(result.id).toEqual(id);
     expect(result.displayName).toEqual(displayName);
