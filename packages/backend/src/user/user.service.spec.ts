@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { compare } from 'bcrypt';
 
+// TODO: should check mock parameters.
 describe('UserService', () => {
   let service: UserService;
   let prismaService: PrismaService;
@@ -11,6 +12,7 @@ describe('UserService', () => {
   const displayName = 'test user';
   const email = 'test@test.com';
   const password = 'Password!';
+  const refreshToken = 'refresh token';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,6 +26,7 @@ describe('UserService', () => {
       displayName: 'test user',
       email,
       password: await bcrypt.hash(password, 10),
+      refreshToken: await bcrypt.hash(refreshToken, 10),
     };
     prismaService.user.findUnique = jest.fn().mockReturnValueOnce(user);
     prismaService.user.create = jest.fn().mockReturnValueOnce(user);
@@ -41,6 +44,7 @@ describe('UserService', () => {
     expect(result.displayName).toEqual(displayName);
     expect(result.email).toEqual(email);
     expect(await compare(password, result.password)).toEqual(true);
+    expect(await compare(refreshToken, result.refreshToken)).toEqual(true);
   });
 
   it('should find user by email', async () => {
@@ -50,19 +54,22 @@ describe('UserService', () => {
     expect(result.displayName).toEqual(displayName);
     expect(result.email).toEqual(email);
     expect(await compare(password, result.password)).toEqual(true);
+    expect(await compare(refreshToken, result.refreshToken)).toEqual(true);
   });
 
   it('should create user', async () => {
     const result = await service.create({
       displayName: 'test user',
       email,
-      password: password,
+      password,
+      refreshToken,
     });
 
     expect(result.id).toEqual(id);
     expect(result.displayName).toEqual(displayName);
     expect(result.email).toEqual(email);
     expect(await compare(password, result.password)).toEqual(true);
+    expect(await compare(refreshToken, result.refreshToken)).toEqual(true);
   });
 
   it('should update user', async () => {
@@ -70,12 +77,14 @@ describe('UserService', () => {
       id,
       displayName: 'test user',
       email,
-      password: password,
+      password,
+      refreshToken,
     });
 
     expect(result.id).toEqual(id);
     expect(result.displayName).toEqual(displayName);
     expect(result.email).toEqual(email);
     expect(await compare(password, result.password)).toEqual(true);
+    expect(await compare(refreshToken, result.refreshToken)).toEqual(true);
   });
 });

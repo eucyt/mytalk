@@ -16,17 +16,25 @@ export class UserService {
   }
 
   async create(user: Omit<User, 'id'>) {
-    const { password, ...remaining } = user;
+    const { password, refreshToken, ...remaining } = user;
     return this.prismaService.user.create({
-      data: { password: await hash(password, 10), ...remaining },
+      data: {
+        password: await hash(password, 10),
+        refreshToken: await hash(refreshToken, 10),
+        ...remaining,
+      },
     });
   }
 
   async update(user: User) {
-    const { id, password, ...remaining } = user;
+    const { id, password, refreshToken, ...remaining } = user;
     return this.prismaService.user.update({
       where: { id },
-      data: { password: await hash(password, 10), ...remaining },
+      data: {
+        password: await hash(password, 10),
+        refreshToken: await hash(refreshToken, 10),
+        ...remaining,
+      },
     });
   }
 }
