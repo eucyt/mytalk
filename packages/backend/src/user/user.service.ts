@@ -16,9 +16,6 @@ export class UserService {
   }
 
   async create(user: Omit<User, 'id'>) {
-    if (!(await this.findByEmail(user.email))) {
-      return null;
-    }
     const { password, ...remaining } = user;
     return this.prismaService.user.create({
       data: { password: await hash(password, 10), ...remaining },
