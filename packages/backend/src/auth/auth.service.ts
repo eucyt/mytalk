@@ -1,59 +1,90 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { compare, hash } from 'bcrypt';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { compare } from 'bcrypt';
 import {
   AccessTokenResponse,
   LoginResponse,
   RegisterResponse,
 } from './auth.entity';
+import { UserService } from '../user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(
     displayName: string,
     email: string,
     password: string,
   ): Promise<RegisterResponse> {
-    await this.prismaService.user.create({
-      data: {
-        displayName,
-        email,
-        password: await hash(password, 10),
-      },
+    const user = await this.userService.create({
+      displayName,
+      email,
+      password,
+      refreshToken: undefined,
     });
-    return {
-      accessToken: 'todo',
-      refreshToken: 'todo',
-    };
+
+    return this.getTokens(user);
   }
 
-  async login(email: string, password: string): Promise<LoginResponse> {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        email,
-      },
-    });
+  // NOTE: Should validate user by passport-local in controller.
+  async login(user: User): Promise<LoginResponse> {
+    return this.getTokens(user);
+  }
 
-    if (!user || !compare(password, user.password)) {
-      throw new UnauthorizedException('Email or password is invalid');
+  async renewTokens(refreshToken: string): Promise<AccessTokenResponse> {
+    let payload: {
+      userId: string;
+    };
+
+    const invalidErrorMessage = 'Invalid refresh token';
+
+    try {
+      payload = this.jwtService.verify<{
+        userId: string;
+      }>(refreshToken);
+    } catch (e) {
+      throw new BadRequestException(invalidErrorMessage);
     }
 
-    return {
-      accessToken: 'todo',
-      refreshToken: 'todo',
-    };
+    const user = await this.userService.find(Number(payload.userId));
+
+    if (!user || !(await compare(refreshToken, user.refreshToken))) {
+      throw new BadRequestException(invalidErrorMessage);
+    }
+
+    return this.getTokens(user);
   }
 
-  async renewAccessToken(refreshToken: string): Promise<AccessTokenResponse> {
-    return {
-      accessToken: refreshToken + 'todo',
-    };
-  }
+  private async getTokens(user: User) {
+    const accessToken = this.jwtService.sign(
+      {
+        sub: user.id,
+      },
+      {
+        expiresIn: '15m',
+      },
+    );
 
-  async validateUser(email: string, password: string) {
-    const user = await this.prismaService.user.findUnique({ where: { email } });
-    return user && compare(password, user.password);
+    const refreshToken = this.jwtService.sign(
+      {
+        sub_refresh: user.id,
+      },
+      {
+        expiresIn: '7d',
+      },
+    );
+
+    // TODO: create and update should be same transaction.
+    await this.userService.update({ refreshToken, ...user });
+
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
   }
 }
