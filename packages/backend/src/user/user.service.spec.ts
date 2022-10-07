@@ -3,27 +3,29 @@ import { UserService } from './user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { compare } from 'bcrypt';
+import { PrismaModule } from '../prisma/prisma.module';
 
 // TODO: should check mock parameters.
 describe('UserService', () => {
   let service: UserService;
   let prismaService: PrismaService;
   const id = 12345;
-  const displayName = 'test user';
+  const displayName = 'test_user';
   const email = 'test@test.com';
   const password = 'Password!';
-  const refreshToken = 'refresh token';
+  const refreshToken = 'refresh_token';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService, PrismaService],
+      imports: [PrismaModule],
+      providers: [UserService],
     }).compile();
 
     service = module.get<UserService>(UserService);
     prismaService = module.get<PrismaService>(PrismaService);
     const user = {
       id: 12345,
-      displayName: 'test user',
+      displayName,
       email,
       password: await bcrypt.hash(password, 10),
       refreshToken: await bcrypt.hash(refreshToken, 10),
@@ -59,7 +61,7 @@ describe('UserService', () => {
 
   it('should create user', async () => {
     const result = await service.create({
-      displayName: 'test user',
+      displayName,
       email,
       password,
       refreshToken,
@@ -75,7 +77,7 @@ describe('UserService', () => {
   it('should update user', async () => {
     const result = await service.update({
       id,
-      displayName: 'test user',
+      displayName,
       email,
       password,
       refreshToken,
