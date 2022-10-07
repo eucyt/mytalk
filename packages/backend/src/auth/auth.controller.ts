@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import {
   AccessTokenRequest,
   AccessTokenResponse,
@@ -8,6 +8,8 @@ import {
   RegisterResponse,
 } from './auth.entity';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -17,22 +19,40 @@ export class AuthController {
   async register(
     @Body() registerRequest: RegisterRequest,
   ): Promise<RegisterResponse> {
-    return this.authService.register(
+    const tokens = await this.authService.register(
       registerRequest.displayName,
       registerRequest.email,
       registerRequest.password,
     );
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    };
   }
 
   @Post('/login')
-  async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
-    return this.authService.login(loginRequest.email, loginRequest.password);
+  @UseGuards(AuthGuard('local'))
+  async login(
+    @Body() loginRequest: LoginRequest,
+    @Req() request: { user: User },
+  ): Promise<LoginResponse> {
+    const tokens = await this.authService.login(request.user);
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    };
   }
 
   @Post('/accessToken')
   async accessToken(
     @Body() accessTokenRequest: AccessTokenRequest,
   ): Promise<AccessTokenResponse> {
-    return this.authService.renewAccessToken(accessTokenRequest.refreshToken);
+    const tokens = await this.authService.renewTokens(
+      accessTokenRequest.refreshToken,
+    );
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    };
   }
 }

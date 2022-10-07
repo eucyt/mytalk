@@ -1,10 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { compare } from 'bcrypt';
-import {
-  AccessTokenResponse,
-  LoginResponse,
-  RegisterResponse,
-} from './auth.entity';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
@@ -16,11 +11,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(
-    displayName: string,
-    email: string,
-    password: string,
-  ): Promise<RegisterResponse> {
+  async register(displayName: string, email: string, password: string) {
     const user = await this.userService.create({
       displayName,
       email,
@@ -32,11 +23,11 @@ export class AuthService {
   }
 
   // NOTE: Should validate user by passport-local in controller.
-  async login(user: User): Promise<LoginResponse> {
+  async login(user: User) {
     return this.getTokens(user);
   }
 
-  async renewTokens(refreshToken: string): Promise<AccessTokenResponse> {
+  async renewTokens(refreshToken: string) {
     let payload: {
       userId: string;
     };

@@ -76,4 +76,5 @@ export class AccessTokenRequest {
 
 export class AccessTokenResponse {
   accessToken: string;
+  refreshToken: string;
 }
