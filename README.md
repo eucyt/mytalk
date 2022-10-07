@@ -6,8 +6,10 @@ MyTalk - messaging web app
 
 ```
 yarn install
-docker-compose -f ./packages/infra/docker/docker-compose.local.yml up -d mysql
+docker-compose -f ./packages/infra/docker/docker-compose.local.yml up -d
 cp packages/backend/.env.local packages/backend/.env
 yarn back dev
 yarn front start
+cd packages/backend && npx prisma migrate dev
+cd ../..
 ```
