@@ -2311,6 +2311,13 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-0.0.51.tgz"
   integrity sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==
 
+"@types/express-list-endpoints@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@types/express-list-endpoints/-/express-list-endpoints-6.0.0.tgz#4efd6203f20eaa90897b58c616659da102901837"
+  integrity sha512-TIi9ggtP1HzV8FmFmwZ/NV3B+qnRw9XslEhG8Qb/50iLDOmq/7radpC8SKXSCvI74FaOrD6I4dF+q+ml5AEYag==
+  dependencies:
+    "@types/express" "*"
+
 "@types/express-serve-static-core@*", "@types/express-serve-static-core@^4.17.18":
   version "4.17.31"
   resolved "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-4.17.31.tgz"
@@ -4913,6 +4920,18 @@ eslint-plugin-testing-library@^5.0.1:
   dependencies:
     "@typescript-eslint/utils" "^5.13.0"
 
+eslint-plugin-unused-imports@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-unused-imports/-/eslint-plugin-unused-imports-2.0.0.tgz#d8db8c4d0cfa0637a8b51ce3fd7d1b6bc3f08520"
+  integrity sha512-3APeS/tQlTrFa167ThtP0Zm0vctjr4M44HMpeg1P4bK6wItarumq0Ma82xorMKdFsWpphQBlRPzw/pxiVELX1A==
+  dependencies:
+    eslint-rule-composer "^0.3.0"
+
+eslint-rule-composer@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-rule-composer/-/eslint-rule-composer-0.3.0.tgz#79320c927b0c5c0d3d3d2b76c8b4a488f25bbaf9"
+  integrity sha512-bt+Sh8CtDmn2OajxvNO+BX7Wn4CIWMpTRm3MaiKPCQcnnlm0CS2mhui6QaoeQugs+3Kj2ESKEEGJUdVafwhiCg==
+
 eslint-scope@5.1.1, eslint-scope@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/eslint-scope/-/eslint-scope-5.1.1.tgz"
@@ -5203,6 +5222,11 @@ expect@^29.0.0:
     jest-matcher-utils "^29.0.3"
     jest-message-util "^29.0.3"
     jest-util "^29.0.3"
+
+express-list-endpoints@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/express-list-endpoints/-/express-list-endpoints-6.0.0.tgz#903f000b0cc954bbc35ca44e7aa3917e5292d0c2"
+  integrity sha512-1I30bSVego+AU/eSsX/bV2xrOXW5tFhsuXZp7wZd9396bAAxH7KHaAwLXQYra0Aw33xA67HmNiceGf2SOvXaLg==
 
 express@4.18.1, express@^4.17.3:
   version "4.18.1"

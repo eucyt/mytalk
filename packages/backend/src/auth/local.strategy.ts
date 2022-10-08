@@ -1,9 +1,9 @@
-import { Strategy as BaseLocalStrategy } from 'passport-local';
-
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { compare } from 'bcrypt';
+import { Strategy as BaseLocalStrategy } from 'passport-local';
+
 import { UserService } from '../user/user.service';
 
 /**

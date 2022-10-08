@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
-import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { compare } from 'bcrypt';
+
 import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.service';
+import { UserService } from './user.service';
 
 // TODO: should check mock parameters.
 describe('UserService', () => {

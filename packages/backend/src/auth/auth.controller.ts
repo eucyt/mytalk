@@ -1,4 +1,7 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from '@prisma/client';
+
 import {
   AccessTokenRequest,
   AccessTokenResponse,
@@ -8,8 +11,6 @@ import {
   RegisterResponse,
 } from './auth.entity';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
-import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
