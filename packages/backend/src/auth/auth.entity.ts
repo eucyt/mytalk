@@ -1,6 +1,7 @@
 import {
   IsAscii,
   IsEmail,
+  IsNotEmpty,
   Length,
   registerDecorator,
   ValidationArguments,
@@ -39,16 +40,19 @@ export function IsUserAlreadyExist(validationOptions?: ValidationOptions) {
 
 export class RegisterRequest {
   @Length(3, 12)
+  @IsNotEmpty()
   displayName!: string;
 
   @IsEmail()
   @IsUserAlreadyExist({
     message: '$value is already used. Use another email.',
   })
+  @IsNotEmpty()
   email!: string;
 
   @IsAscii()
   @Length(6, 1024)
+  @IsNotEmpty()
   password!: string;
 }
 
@@ -59,10 +63,12 @@ export class RegisterResponse {
 
 export class LoginRequest {
   @IsEmail()
+  @IsNotEmpty()
   email!: string;
 
   @IsAscii()
   @Length(6, 1024)
+  @IsNotEmpty()
   password!: string;
 }
 

@@ -1,6 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { User } from '@prisma/client';
+import { Body, Controller, Post } from '@nestjs/common';
 
 import {
   AccessTokenRequest,
@@ -32,12 +30,11 @@ export class AuthController {
   }
 
   @Post('/login')
-  @UseGuards(AuthGuard('local'))
-  async login(
-    @Body() loginRequest: LoginRequest,
-    @Req() request: { user: User },
-  ): Promise<LoginResponse> {
-    const tokens = await this.authService.login(request.user);
+  async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
+    const tokens = await this.authService.login(
+      loginRequest.email,
+      loginRequest.password,
+    );
     return {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,

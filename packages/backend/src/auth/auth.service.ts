@@ -1,7 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 
 import { UserService } from '../user/user.service';
 
@@ -17,14 +21,17 @@ export class AuthService {
       displayName,
       email,
       password,
-      refreshToken: undefined,
     });
 
     return this.getTokens(user);
   }
 
-  // NOTE: Should validate user by passport-local in controller.
-  async login(user: User) {
+  async login(email: string, password: string) {
+    const user = await this.userService.findByEmail(email);
+    console.log(email);
+    if (!user || !(await compare(password, user.password))) {
+      throw new UnauthorizedException('Email or password is invalid.');
+    }
     return this.getTokens(user);
   }
 
@@ -72,7 +79,10 @@ export class AuthService {
     );
 
     // TODO: create and update should be same transaction.
-    await this.userService.update({ refreshToken, ...user });
+    await this.userService.update({
+      refreshToken: await hash(refreshToken, 10),
+      ...user,
+    });
 
     return {
       accessToken: accessToken,

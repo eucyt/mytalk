@@ -16,25 +16,22 @@ export class UserService {
     return this.prismaService.user.findUnique({ where: { email } });
   }
 
-  async create(user: Omit<User, 'id'>) {
-    const { password, refreshToken, ...remaining } = user;
+  async create(user: { displayName: string; email: string; password: string }) {
+    const { password, ...remaining } = user;
     return this.prismaService.user.create({
       data: {
         password: await hash(password, 10),
-        refreshToken: await hash(refreshToken, 10),
         ...remaining,
       },
     });
   }
 
   async update(user: User) {
-    const { id, password, refreshToken, ...remaining } = user;
+    delete user.updatedAt;
     return this.prismaService.user.update({
-      where: { id },
+      where: { id: user.id },
       data: {
-        password: await hash(password, 10),
-        refreshToken: await hash(refreshToken, 10),
-        ...remaining,
+        ...user,
       },
     });
   }
