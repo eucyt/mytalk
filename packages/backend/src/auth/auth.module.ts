@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 
@@ -17,6 +17,7 @@ import { LocalStrategy } from './local.strategy';
         secret: configService.get<string>('JWT_SECRET_KEY'),
       }),
       inject: [ConfigService],
+      imports: [ConfigModule],
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
