@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import {
   IsAscii,
   IsEmail,
@@ -13,15 +14,21 @@ import {
 import { UserService } from '../user/user.service';
 
 @ValidatorConstraint({ async: true })
+@Injectable()
 export class IsUserAlreadyExistConstraint
   implements ValidatorConstraintInterface
 {
   constructor(private readonly userService: UserService) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validate(email: string, args: ValidationArguments) {
-    return this.userService.findByEmail(email).then((user) => {
-      return !user;
-    });
+    // If user that has same email exist, return false (= Repelled by validation.)
+    // If there is no email arg, return false (= Repelled by validation.)
+    return (
+      email != null &&
+      this.userService.findByEmail(email).then((user) => {
+        return !user;
+      })
+    );
   }
 }
 
@@ -39,20 +46,20 @@ export function IsUserAlreadyExist(validationOptions?: ValidationOptions) {
 }
 
 export class RegisterRequest {
-  @Length(3, 12)
   @IsNotEmpty()
+  @Length(3, 12)
   displayName!: string;
 
+  @IsNotEmpty()
   @IsEmail()
   @IsUserAlreadyExist({
     message: '$value is already used. Use another email.',
   })
-  @IsNotEmpty()
   email!: string;
 
+  @IsNotEmpty()
   @IsAscii()
   @Length(6, 1024)
-  @IsNotEmpty()
   password!: string;
 }
 
@@ -62,13 +69,13 @@ export class RegisterResponse {
 }
 
 export class LoginRequest {
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email!: string;
 
+  @IsNotEmpty()
   @IsAscii()
   @Length(6, 1024)
-  @IsNotEmpty()
   password!: string;
 }
 

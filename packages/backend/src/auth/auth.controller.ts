@@ -41,7 +41,7 @@ export class AuthController {
     };
   }
 
-  @Post('/accessToken')
+  @Post('/access-token')
   async accessToken(
     @Body() accessTokenRequest: AccessTokenRequest,
   ): Promise<AccessTokenResponse> {

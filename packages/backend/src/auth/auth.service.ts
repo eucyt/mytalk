@@ -27,8 +27,8 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
+    // TODO: make LocalStrategy
     const user = await this.userService.findByEmail(email);
-    console.log(email);
     if (!user || !(await compare(password, user.password))) {
       throw new UnauthorizedException('Email or password is invalid.');
     }
@@ -37,20 +37,20 @@ export class AuthService {
 
   async renewTokens(refreshToken: string) {
     let payload: {
-      userId: string;
+      sub_refresh: string;
     };
 
     const invalidErrorMessage = 'Invalid refresh token';
 
     try {
       payload = this.jwtService.verify<{
-        userId: string;
+        sub_refresh: string;
       }>(refreshToken);
     } catch (e) {
       throw new BadRequestException(invalidErrorMessage);
     }
 
-    const user = await this.userService.find(Number(payload.userId));
+    const user = await this.userService.find(Number(payload.sub_refresh));
 
     if (!user || !(await compare(refreshToken, user.refreshToken))) {
       throw new BadRequestException(invalidErrorMessage);

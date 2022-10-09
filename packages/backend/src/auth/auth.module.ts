@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ModuleRef } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { useContainer } from 'class-validator';
 
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
+import { IsUserAlreadyExistConstraint } from './auth.entity';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 
@@ -22,8 +25,15 @@ import { JwtStrategy } from './jwt.strategy';
       imports: [ConfigModule],
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, IsUserAlreadyExistConstraint],
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule {}
+
+// for IsUserAlreadyExistConstraint injection
+export class AuthModule {
+  constructor(private moduleRef: ModuleRef) {}
+  onModuleInit() {
+    useContainer(this.moduleRef, { fallbackOnErrors: true });
+  }
+}
