@@ -1,5 +1,4 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 
 import {
   AccessTokenRequest,
@@ -10,6 +9,7 @@ import {
   RegisterResponse,
 } from './auth.entity';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -56,7 +56,7 @@ export class AuthController {
   }
 
   @Get('/')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   async isAuthenticated() {
     return;
   }
