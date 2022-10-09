@@ -35,25 +35,9 @@ export class AuthService {
     return this.getTokens(user);
   }
 
-  async renewTokens(refreshToken: string) {
-    let payload: {
-      sub_refresh: string;
-    };
-
-    const invalidErrorMessage = 'Invalid refresh token';
-
-    try {
-      payload = this.jwtService.verify<{
-        sub_refresh: string;
-      }>(refreshToken);
-    } catch (e) {
-      throw new BadRequestException(invalidErrorMessage);
-    }
-
-    const user = await this.userService.find(Number(payload.sub_refresh));
-
+  async renewTokens(user: User, refreshToken: string) {
     if (!user || !(await compare(refreshToken, user.refreshToken))) {
-      throw new BadRequestException(invalidErrorMessage);
+      throw new BadRequestException('Invalid refresh token');
     }
 
     return this.getTokens(user);
@@ -80,8 +64,8 @@ export class AuthService {
 
     // TODO: create and update should be same transaction.
     await this.userService.update({
-      refreshToken: await hash(refreshToken, 10),
       ...user,
+      refreshToken: await hash(refreshToken, 10),
     });
 
     return {

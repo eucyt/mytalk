@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { IsUserAlreadyExistConstraint } from './auth.entity';
 import { AuthService } from './auth.service';
+import { JwtRefreshStrategy } from './jwt-refresh.strategy';
 import { JwtStrategy } from './jwt.strategy';
 
 @Module({
@@ -25,7 +26,12 @@ import { JwtStrategy } from './jwt.strategy';
       imports: [ConfigModule],
     }),
   ],
-  providers: [AuthService, JwtStrategy, IsUserAlreadyExistConstraint],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    JwtRefreshStrategy,
+    IsUserAlreadyExistConstraint,
+  ],
   controllers: [AuthController],
   exports: [AuthService],
 })

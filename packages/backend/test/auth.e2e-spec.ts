@@ -224,29 +224,69 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
-      .set('Authorization', 'bearer ' + 'InvalidToken');
+      .set('Authorization', 'Bearer ' + 'InvalidToken');
 
     expect(res.status).toEqual(401);
   });
 
-  // it('OK /access-token (POST)', async () => {
-  //   const body: LoginRequest = {
-  //     email: alice.email,
-  //     password: alice.password,
-  //   };
-  //   const loginRes = await request(app.getHttpServer())
-  //     .post('/auth/login')
-  //     .set('Accept', 'application/json')
-  //     .send(body);
-  //
-  //   const renewTokensRes = await request(app.getHttpServer())
-  //     .post('/auth/access-token')
-  //     .set('Accept', 'application/json')
-  //     .set('Authorization', 'bearer ' + loginRes.body.refreshTokens);
-  //   expect(renewTokensRes.status).toEqual(201);
-  //   expect(renewTokensRes.body).toHaveProperty('accessToken');
-  //   expect(renewTokensRes.body).toHaveProperty('refreshToken');
-  // });
+  it('OK /access-token (POST)', async () => {
+    const body: LoginRequest = {
+      email: alice.email,
+      password: alice.password,
+    };
+    const loginRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    const renewTokensRes = await request(app.getHttpServer())
+      .post('/auth/access-token')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
+    expect(renewTokensRes.status).toEqual(201);
+    expect(renewTokensRes.body).toHaveProperty('accessToken');
+    expect(renewTokensRes.body).toHaveProperty('refreshToken');
+  });
+
+  it('OK /access-token (POST): return correct token', async () => {
+    const body: LoginRequest = {
+      email: alice.email,
+      password: alice.password,
+    };
+    const loginRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    const renewTokensRes = await request(app.getHttpServer())
+      .post('/auth/access-token')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
+
+    const renewTokensAgainRes = await request(app.getHttpServer())
+      .post('/auth/access-token')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + renewTokensRes.body.refreshToken);
+    expect(renewTokensAgainRes.status).toEqual(201);
+
+    const res = await request(app.getHttpServer())
+      .get('/auth')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + renewTokensAgainRes.body.accessToken);
+
+    expect(res.status).toEqual(200);
+  });
+
+  it('NG /access-token (POST): return correct token', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/auth/access-token')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + 'InvalidToken');
+
+    expect(res.status).toEqual(401);
+    expect(res.body).not.toHaveProperty('accessToken');
+    expect(res.body).not.toHaveProperty('refreshToken');
+  });
 
   // TODO: add other test cases
 });

@@ -84,10 +84,6 @@ export class LoginResponse {
   refreshToken: string;
 }
 
-export class AccessTokenRequest {
-  refreshToken: string;
-}
-
 export class AccessTokenResponse {
   accessToken: string;
   refreshToken: string;

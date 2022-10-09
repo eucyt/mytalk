@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 
 import {
-  AccessTokenRequest,
   AccessTokenResponse,
   LoginRequest,
   LoginResponse,
@@ -10,6 +9,7 @@ import {
 } from './auth.entity';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtRefreshAuthGuard } from './jwt-refresh-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -43,11 +43,11 @@ export class AuthController {
   }
 
   @Post('/access-token')
-  async accessToken(
-    @Body() accessTokenRequest: AccessTokenRequest,
-  ): Promise<AccessTokenResponse> {
+  @UseGuards(JwtRefreshAuthGuard)
+  async accessToken(@Req() req): Promise<AccessTokenResponse> {
     const tokens = await this.authService.renewTokens(
-      accessTokenRequest.refreshToken,
+      req.user,
+      req.headers.authorization.replace('Bearer', '').trim(),
     );
     return {
       accessToken: tokens.accessToken,
