@@ -24,7 +24,7 @@ describe('AuthController (e2e)', () => {
     await app.init();
   });
 
-  it('NG /register (POST): No displayName', async () => {
+  it('NG /auth/register (POST): No displayName', async () => {
     const body = {
       email: 'test.e2e@test.com',
       password: 'e2ePassword!',
@@ -52,7 +52,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('NG /register (POST): No password', async () => {
+  it('NG /auth/register (POST): No password', async () => {
     const body = {
       displayName: 'test_name',
       email: 'test.e2e@test.com',
@@ -66,7 +66,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('NG /register (POST): Existed email', async () => {
+  it('NG /auth/register (POST): Existed email', async () => {
     const body: RegisterRequest = {
       displayName: 'test_name',
       email: alice.email,
@@ -81,7 +81,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('NG /register (POST): Short displayName', async () => {
+  it('NG /auth/register (POST): Short displayName', async () => {
     const body: RegisterRequest = {
       displayName: 'Aa',
       email: 'test.e2e@test.com',
@@ -96,7 +96,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('NG /register (POST): Short password', async () => {
+  it('NG /auth/register (POST): Short password', async () => {
     const body: RegisterRequest = {
       displayName: 'test_name',
       email: 'test.e2e@test.com',
@@ -111,7 +111,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('OK /register (POST)', async () => {
+  it('OK /auth/register (POST)', async () => {
     const body: RegisterRequest = {
       displayName: 'test_name',
       email: 'test.e2e@test.com',
@@ -126,7 +126,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).toHaveProperty('refreshToken');
   });
 
-  it('OK /login (POST)', async () => {
+  it('OK /auth/login (POST)', async () => {
     const body: LoginRequest = {
       email: alice.email,
       password: alice.password,
@@ -140,7 +140,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).toHaveProperty('refreshToken');
   });
 
-  it('NG /login (POST): Incorrect email', async () => {
+  it('NG /auth/login (POST): Incorrect email', async () => {
     const body: LoginRequest = {
       email: alice.email + 'Incorrect',
       password: alice.password,
@@ -154,7 +154,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('NG /login (POST): Incorrect password', async () => {
+  it('NG /auth/login (POST): Incorrect password', async () => {
     const body: LoginRequest = {
       email: alice.email,
       password: alice.password + 'Incorrect',
@@ -168,7 +168,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('NG /login (POST): Incorrect email and password', async () => {
+  it('NG /auth/login (POST): Incorrect email and password', async () => {
     const body: LoginRequest = {
       email: alice.email + 'Incorrect',
       password: alice.password + 'Incorrect',
@@ -182,7 +182,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('OK /register (POST) and /login (POST)', async () => {
+  it('OK /auth/register (POST) and /login (POST)', async () => {
     const body: RegisterRequest = {
       displayName: 'regi_login',
       email: 'register.login@test.com',
@@ -201,6 +201,52 @@ describe('AuthController (e2e)', () => {
     expect(loginRes.body).toHaveProperty('accessToken');
     expect(loginRes.body).toHaveProperty('refreshToken');
   });
+
+  it('OK /auth (POST)', async () => {
+    const body: LoginRequest = {
+      email: alice.email,
+      password: alice.password,
+    };
+    const loginRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    const res = await request(app.getHttpServer())
+      .get('/auth')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + loginRes.body.accessToken);
+
+    expect(res.status).toEqual(200);
+  });
+
+  it('NG /auth (POST): Invalid accessToken', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/auth')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + 'InvalidToken');
+
+    expect(res.status).toEqual(401);
+  });
+
+  // it('OK /access-token (POST)', async () => {
+  //   const body: LoginRequest = {
+  //     email: alice.email,
+  //     password: alice.password,
+  //   };
+  //   const loginRes = await request(app.getHttpServer())
+  //     .post('/auth/login')
+  //     .set('Accept', 'application/json')
+  //     .send(body);
+  //
+  //   const renewTokensRes = await request(app.getHttpServer())
+  //     .post('/auth/access-token')
+  //     .set('Accept', 'application/json')
+  //     .set('Authorization', 'bearer ' + loginRes.body.refreshTokens);
+  //   expect(renewTokensRes.status).toEqual(201);
+  //   expect(renewTokensRes.body).toHaveProperty('accessToken');
+  //   expect(renewTokensRes.body).toHaveProperty('refreshToken');
+  // });
 
   // TODO: add other test cases
 });

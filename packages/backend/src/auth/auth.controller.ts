@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import {
   AccessTokenRequest,
@@ -52,5 +53,11 @@ export class AuthController {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
     };
+  }
+
+  @Get('/')
+  @UseGuards(AuthGuard('jwt'))
+  async isAuthenticated() {
+    return;
   }
 }
