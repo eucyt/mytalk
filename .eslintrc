@@ -1,0 +1,147 @@
+{
+  "extends": ["eslint:recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./packages/*/tsconfig.json"]
+      },
+      "plugins": [
+        "@typescript-eslint",
+        "array-func",
+        "no-constructor-bind",
+        "no-use-extend-native",
+        "optimize-regex",
+        "promise",
+        "regexp",
+        "sonarjs",
+        "sort-class-members",
+        "switch-case",
+        "tailwindcss",
+        "unused-imports",
+        "only-warn"
+      ],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/strict",
+        "plugin:array-func/recommended",
+        "plugin:no-use-extend-native/recommended",
+        "plugin:promise/recommended",
+        "plugin:optimize-regex/recommended",
+        "plugin:regexp/recommended",
+        "plugin:security/recommended",
+        "plugin:sonarjs/recommended",
+        "plugin:switch-case/recommended",
+        "plugin:tailwindcss/recommended",
+        "prettier",
+        "react-app",
+        "react-app/jest"
+      ],
+      "rules": {
+        "unused-imports/no-unused-imports": "error",
+        "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/no-extraneous-class": "off",
+        "@typescript-eslint/no-throw-literal": "off",
+        "no-constructor-bind/no-constructor-bind": "error",
+        "no-constructor-bind/no-constructor-state": "error",
+        "promise/always-return": "off",
+        "sort-class-members/sort-class-members": [
+          "error",
+          {
+            "order": [
+              "[static-properties]",
+              "[static-methods]",
+              "[properties]",
+              "[conventional-private-properties]",
+              "constructor",
+              "[methods]",
+              "[conventional-private-methods]"
+            ],
+            "accessorPairPositioning": "getThenSet"
+          }
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "parameter",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": "property",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "enumMember",
+            "format": ["UPPER_CASE"]
+          }
+        ],
+        "import/order": [
+          "error",
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              ["parent", "sibling"],
+              "object",
+              "type",
+              "index"
+            ],
+            "newlines-between": "always",
+            "pathGroupsExcludedImportTypes": ["builtin"],
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
+            "pathGroups": [
+              {
+                "pattern": "@/components/common",
+                "group": "internal",
+                "position": "before"
+              },
+              {
+                "pattern": "@/components/hooks",
+                "group": "internal",
+                "position": "before"
+              }
+            ]
+          }
+        ]
+      },
+      "settings": {
+        "tailwindcss": {
+          "config": "./packages/frontend/tailwind.config.js"
+        }
+      }
+    },
+    {
+      "files": ["./packages/**/*spec.ts"],
+      "rules": {
+        "sonarjs/no-duplicate-string": "off"
+      }
+    }
+  ]
+}

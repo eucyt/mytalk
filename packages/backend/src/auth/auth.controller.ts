@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 import {
   AccessTokenResponse,
@@ -35,7 +36,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   async login(
     @Body() loginRequest: LoginRequest,
-    @Req() req,
+    @Req() req: { user: User },
   ): Promise<LoginResponse> {
     const tokens = await this.authService.login(req.user);
     return {
@@ -46,7 +47,9 @@ export class AuthController {
 
   @Post('/access-token')
   @UseGuards(JwtRefreshAuthGuard)
-  async accessToken(@Req() req): Promise<AccessTokenResponse> {
+  async accessToken(
+    @Req() req: { user: User; headers: { authorization: string } },
+  ): Promise<AccessTokenResponse> {
     const tokens = await this.authService.renewTokens(
       req.user,
       req.headers.authorization.replace('Bearer', '').trim(),
@@ -59,7 +62,7 @@ export class AuthController {
 
   @Get('/')
   @UseGuards(JwtAuthGuard)
-  async isAuthenticated() {
+  isAuthenticated() {
     return;
   }
 }

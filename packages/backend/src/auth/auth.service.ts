@@ -27,7 +27,10 @@ export class AuthService {
   }
 
   async renewTokens(user: User, refreshToken: string) {
-    if (!user || !(await compare(refreshToken, user.refreshToken))) {
+    if (
+      !user.refreshToken ||
+      !(await compare(refreshToken, user.refreshToken))
+    ) {
       throw new BadRequestException('Invalid refresh token');
     }
 
@@ -46,7 +49,7 @@ export class AuthService {
 
     const refreshToken = this.jwtService.sign(
       {
-        sub_refresh: user.id,
+        subRefresh: user.id,
       },
       {
         expiresIn: '7d',

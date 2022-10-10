@@ -27,6 +27,7 @@ export class UserService {
   }
 
   async update(user: User) {
+    // @ts-expect-error updatedAt is autofill
     delete user.updatedAt;
     return this.prismaService.user.update({
       where: { id: user.id },

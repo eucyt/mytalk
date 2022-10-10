@@ -22,12 +22,12 @@ export class JwtRefreshStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: { sub_refresh?: string }): Promise<User> {
-    if (!payload.sub_refresh) {
+  async validate(payload: { subRefresh?: string }): Promise<User> {
+    if (!payload.subRefresh) {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const user = await this.userService.find(Number(payload.sub_refresh));
+    const user = await this.userService.find(Number(payload.subRefresh));
 
     if (!user) throw new UnauthorizedException('Invalid refresh token');
 

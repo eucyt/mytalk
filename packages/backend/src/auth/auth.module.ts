@@ -20,7 +20,7 @@ import { LocalStrategy } from './local.strategy';
     ConfigModule,
 
     JwtModule.registerAsync({
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET_KEY'),
       }),
       inject: [ConfigService],
@@ -42,6 +42,7 @@ import { LocalStrategy } from './local.strategy';
 export class AuthModule {
   constructor(private moduleRef: ModuleRef) {}
   onModuleInit() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useContainer(this.moduleRef, { fallbackOnErrors: true });
   }
 }

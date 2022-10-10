@@ -24,6 +24,7 @@ export class IsUserAlreadyExistConstraint
     // If user that has same email exist, return false (= Repelled by validation.)
     // If there is no email arg, return false (= Repelled by validation.)
     return (
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       email != null &&
       this.userService.findByEmail(email).then((user) => {
         return !user;
@@ -32,7 +33,7 @@ export class IsUserAlreadyExistConstraint
   }
 }
 
-export function IsUserAlreadyExist(validationOptions?: ValidationOptions) {
+export function isUserAlreadyExist(validationOptions?: ValidationOptions) {
   // eslint-disable-next-line @typescript-eslint/ban-types
   return function (object: Object, propertyName: string) {
     registerDecorator({
@@ -52,7 +53,7 @@ export class RegisterRequest {
 
   @IsNotEmpty()
   @IsEmail()
-  @IsUserAlreadyExist({
+  @isUserAlreadyExist({
     message: '$value is already used. Use another email.',
   })
   email!: string;
@@ -64,8 +65,8 @@ export class RegisterRequest {
 }
 
 export class RegisterResponse {
-  accessToken: string;
-  refreshToken: string;
+  accessToken!: string;
+  refreshToken!: string;
 }
 
 export class LoginRequest {
@@ -80,11 +81,11 @@ export class LoginRequest {
 }
 
 export class LoginResponse {
-  accessToken: string;
-  refreshToken: string;
+  accessToken!: string;
+  refreshToken!: string;
 }
 
 export class AccessTokenResponse {
-  accessToken: string;
-  refreshToken: string;
+  accessToken!: string;
+  refreshToken!: string;
 }

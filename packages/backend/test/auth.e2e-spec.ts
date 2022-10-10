@@ -195,6 +195,7 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + loginRes.body.accessToken);
 
     expect(res.status).toEqual(200);
@@ -214,6 +215,7 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + registerRes.body.accessToken);
 
     expect(res.status).toEqual(200);
@@ -223,7 +225,7 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Bearer ' + 'InvalidToken');
+      .set('Authorization', 'Bearer InvalidToken');
 
     expect(res.status).toEqual(401);
   });
@@ -241,6 +243,7 @@ describe('AuthController (e2e)', () => {
     const renewTokensRes = await request(app.getHttpServer())
       .post('/auth/access-token')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
     expect(renewTokensRes.status).toEqual(201);
     expect(renewTokensRes.body).toHaveProperty('accessToken');
@@ -251,7 +254,7 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .post('/auth/access-token')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Bearer ' + 'InvalidToken');
+      .set('Authorization', 'Bearer InvalidToken');
 
     expect(res.status).toEqual(401);
     expect(res.body).not.toHaveProperty('accessToken');
@@ -294,17 +297,20 @@ describe('AuthController (e2e)', () => {
     const renewTokensRes = await request(app.getHttpServer())
       .post('/auth/access-token')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
 
     const renewTokensAgainRes = await request(app.getHttpServer())
       .post('/auth/access-token')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + renewTokensRes.body.refreshToken);
     expect(renewTokensAgainRes.status).toEqual(201);
 
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + renewTokensAgainRes.body.accessToken);
 
     expect(res.status).toEqual(200);
@@ -324,6 +330,7 @@ describe('AuthController (e2e)', () => {
     const renewTokensRes = await request(app.getHttpServer())
       .post('/auth/access-token')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + registerRes.body.refreshToken);
     expect(renewTokensRes.status).toEqual(201);
     expect(renewTokensRes.body).toHaveProperty('accessToken');
@@ -332,6 +339,7 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + registerRes.body.accessToken);
 
     expect(res.status).toEqual(200);
