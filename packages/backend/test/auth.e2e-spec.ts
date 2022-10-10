@@ -38,7 +38,7 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('NG /register (POST): No email', async () => {
+  it('NG /auth/register (POST): No email', async () => {
     const body = {
       displayName: 'test_name',
       password: 'e2ePassword!',
@@ -182,26 +182,6 @@ describe('AuthController (e2e)', () => {
     expect(res.body).not.toHaveProperty('refreshToken');
   });
 
-  it('OK /auth/register (POST) and /login (POST)', async () => {
-    const body: RegisterRequest = {
-      displayName: 'regi_login',
-      email: 'register.login@test.com',
-      password: 'RLPassword!',
-    };
-    await request(app.getHttpServer())
-      .post('/auth/register')
-      .set('Accept', 'application/json')
-      .send(body);
-
-    const loginRes = await request(app.getHttpServer())
-      .post('/auth/login')
-      .set('Accept', 'application/json')
-      .send({ email: body.email, password: body.password });
-    expect(loginRes.status).toEqual(201);
-    expect(loginRes.body).toHaveProperty('accessToken');
-    expect(loginRes.body).toHaveProperty('refreshToken');
-  });
-
   it('OK /auth (POST)', async () => {
     const body: LoginRequest = {
       email: alice.email,
@@ -216,6 +196,25 @@ describe('AuthController (e2e)', () => {
       .get('/auth')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + loginRes.body.accessToken);
+
+    expect(res.status).toEqual(200);
+  });
+
+  it('OK /auth (POST): Use register', async () => {
+    const body: RegisterRequest = {
+      displayName: 'R_name',
+      email: 'R.test@test.com',
+      password: 'RPassword!',
+    };
+    const registerRes = await request(app.getHttpServer())
+      .post('/auth/register')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    const res = await request(app.getHttpServer())
+      .get('/auth')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + registerRes.body.accessToken);
 
     expect(res.status).toEqual(200);
   });
@@ -248,7 +247,41 @@ describe('AuthController (e2e)', () => {
     expect(renewTokensRes.body).toHaveProperty('refreshToken');
   });
 
-  it('OK /access-token (POST): return correct token', async () => {
+  it('NG /access-token (POST): Invalid token', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/auth/access-token')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + 'InvalidToken');
+
+    expect(res.status).toEqual(401);
+    expect(res.body).not.toHaveProperty('accessToken');
+    expect(res.body).not.toHaveProperty('refreshToken');
+  });
+
+  /*
+      join e2e test to check auth
+  */
+  it('OK Should register and login', async () => {
+    const body: RegisterRequest = {
+      displayName: 'regi_login',
+      email: 'register.login@test.com',
+      password: 'RLPassword!',
+    };
+    await request(app.getHttpServer())
+      .post('/auth/register')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    const loginRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Accept', 'application/json')
+      .send({ email: body.email, password: body.password });
+    expect(loginRes.status).toEqual(201);
+    expect(loginRes.body).toHaveProperty('accessToken');
+    expect(loginRes.body).toHaveProperty('refreshToken');
+  });
+
+  it('OK access-token return correct token', async () => {
     const body: LoginRequest = {
       email: alice.email,
       password: alice.password,
@@ -277,16 +310,30 @@ describe('AuthController (e2e)', () => {
     expect(res.status).toEqual(200);
   });
 
-  it('NG /access-token (POST): return correct token', async () => {
-    const res = await request(app.getHttpServer())
+  it('OK Register return correct token', async () => {
+    const body: RegisterRequest = {
+      displayName: 'AR_name',
+      email: 'AR.test@test.com',
+      password: 'ARPassword!',
+    };
+    const registerRes = await request(app.getHttpServer())
+      .post('/auth/register')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    const renewTokensRes = await request(app.getHttpServer())
       .post('/auth/access-token')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Bearer ' + 'InvalidToken');
+      .set('Authorization', 'Bearer ' + registerRes.body.refreshToken);
+    expect(renewTokensRes.status).toEqual(201);
+    expect(renewTokensRes.body).toHaveProperty('accessToken');
+    expect(renewTokensRes.body).toHaveProperty('refreshToken');
 
-    expect(res.status).toEqual(401);
-    expect(res.body).not.toHaveProperty('accessToken');
-    expect(res.body).not.toHaveProperty('refreshToken');
+    const res = await request(app.getHttpServer())
+      .get('/auth')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + registerRes.body.accessToken);
+
+    expect(res.status).toEqual(200);
   });
-
-  // TODO: add other test cases
 });
