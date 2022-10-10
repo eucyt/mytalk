@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
@@ -26,12 +22,7 @@ export class AuthService {
     return this.getTokens(user);
   }
 
-  async login(email: string, password: string) {
-    // TODO: make LocalStrategy
-    const user = await this.userService.findByEmail(email);
-    if (!user || !(await compare(password, user.password))) {
-      throw new UnauthorizedException('Email or password is invalid.');
-    }
+  async login(user: User) {
     return this.getTokens(user);
   }
 

@@ -11,6 +11,7 @@ import { IsUserAlreadyExistConstraint } from './auth.entity';
 import { AuthService } from './auth.service';
 import { JwtRefreshStrategy } from './jwt-refresh.strategy';
 import { JwtStrategy } from './jwt.strategy';
+import { LocalStrategy } from './local.strategy';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { JwtStrategy } from './jwt.strategy';
   ],
   providers: [
     AuthService,
+    LocalStrategy,
     JwtStrategy,
     JwtRefreshStrategy,
     IsUserAlreadyExistConstraint,

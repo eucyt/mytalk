@@ -10,6 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtRefreshAuthGuard } from './jwt-refresh-auth.guard';
+import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -31,11 +32,12 @@ export class AuthController {
   }
 
   @Post('/login')
-  async login(@Body() loginRequest: LoginRequest): Promise<LoginResponse> {
-    const tokens = await this.authService.login(
-      loginRequest.email,
-      loginRequest.password,
-    );
+  @UseGuards(LocalAuthGuard)
+  async login(
+    @Body() loginRequest: LoginRequest,
+    @Req() req,
+  ): Promise<LoginResponse> {
+    const tokens = await this.authService.login(req.user);
     return {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
