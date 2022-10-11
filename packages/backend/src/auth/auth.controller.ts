@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 
 import {
@@ -7,6 +15,7 @@ import {
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
+  WithdrawRequest,
 } from './auth.entity';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -64,5 +73,20 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   isAuthenticated() {
     return;
+  }
+
+  @Post('/logout')
+  @UseGuards(JwtRefreshAuthGuard)
+  async logout(@Req() req: { user: User }) {
+    return await this.authService.logout(req.user);
+  }
+
+  @Delete('/withdraw')
+  @UseGuards(LocalAuthGuard)
+  async withdraw(
+    @Req() req: { user: User },
+    @Body() withdrawRequest: WithdrawRequest,
+  ) {
+    return await this.authService.withdraw(req.user);
   }
 }

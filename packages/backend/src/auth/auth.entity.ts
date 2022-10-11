@@ -89,3 +89,14 @@ export class AccessTokenResponse {
   accessToken!: string;
   refreshToken!: string;
 }
+
+export class WithdrawRequest {
+  @IsNotEmpty()
+  @IsEmail()
+  email!: string;
+
+  @IsNotEmpty()
+  @IsAscii()
+  @Length(6, 1024)
+  password!: string;
+}
