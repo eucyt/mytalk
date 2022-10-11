@@ -142,6 +142,45 @@
       "rules": {
         "sonarjs/no-duplicate-string": "off"
       }
+    },
+    {
+      "files": ["./packages/frontend/**/*.tsx"],
+      "rules": {
+        "react/display-name": "off",
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["camelCase"]
+          },
+          {
+            "selector": "variable",
+            "format": ["camelCase", "PascalCase", "UPPER_CASE"]
+          },
+          {
+            "selector": "parameter",
+            "format": ["camelCase", "PascalCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "property",
+            "format": null
+          },
+          {
+            "selector": "enumMember",
+            "format": ["UPPER_CASE"]
+          },
+          {
+            "selector": "function",
+            "format": ["camelCase", "PascalCase"]
+          }
+        ]
+      }
     }
   ]
 }
