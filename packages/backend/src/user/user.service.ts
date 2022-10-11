@@ -36,4 +36,9 @@ export class UserService {
       },
     });
   }
+
+  //TODO: soft delete
+  async delete(id: number) {
+    return this.prismaService.user.delete({ where: { id } });
+  }
 }

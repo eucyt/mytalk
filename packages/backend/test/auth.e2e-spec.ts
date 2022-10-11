@@ -2,7 +2,11 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
-import { LoginRequest, RegisterRequest } from '../src/auth/auth.entity';
+import {
+  LoginRequest,
+  RegisterRequest,
+  WithdrawRequest,
+} from '../src/auth/auth.entity';
 import { AuthModule } from '../src/auth/auth.module';
 
 describe('AuthController (e2e)', () => {
@@ -230,7 +234,7 @@ describe('AuthController (e2e)', () => {
     expect(res.status).toEqual(401);
   });
 
-  it('OK /access-token (POST)', async () => {
+  it('OK /auth/access-token (POST)', async () => {
     const body: LoginRequest = {
       email: alice.email,
       password: alice.password,
@@ -250,7 +254,7 @@ describe('AuthController (e2e)', () => {
     expect(renewTokensRes.body).toHaveProperty('refreshToken');
   });
 
-  it('NG /access-token (POST): Invalid token', async () => {
+  it('NG /auth/access-token (POST): Invalid token', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/access-token')
       .set('Accept', 'application/json')
@@ -259,6 +263,72 @@ describe('AuthController (e2e)', () => {
     expect(res.status).toEqual(401);
     expect(res.body).not.toHaveProperty('accessToken');
     expect(res.body).not.toHaveProperty('refreshToken');
+  });
+
+  it('OK /auth/logout (POST)', async () => {
+    const body: LoginRequest = {
+      email: alice.email,
+      password: alice.password,
+    };
+    const loginRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/logout')
+      .set('Accept', 'application/json')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
+
+    expect(res.status).toEqual(201);
+    expect(res.body).not.toHaveProperty('accessToken');
+    expect(res.body).not.toHaveProperty('refreshToken');
+  });
+
+  it('NG /auth/logout (POST): Invalid token', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/auth/logout')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer InvalidToken');
+
+    expect(res.status).toEqual(401);
+  });
+
+  it('OK /auth/withdraw (DELETE)', async () => {
+    const body: WithdrawRequest = {
+      email: 'test.e2e@test.com',
+      password: 'e2ePassword!',
+    };
+
+    const withdrawRes = await request(app.getHttpServer())
+      .delete('/auth/withdraw')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    expect(withdrawRes.status).toEqual(200);
+    expect(withdrawRes.body).not.toHaveProperty('accessToken');
+    expect(withdrawRes.body).not.toHaveProperty('refreshToken');
+
+    const loginRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Accept', 'application/json')
+      .send(body);
+    expect(loginRes.status).toEqual(401);
+  });
+
+  it('NG /auth/withdraw (DELETE)', async () => {
+    const body: WithdrawRequest = {
+      email: 'test.no.exist@test.com',
+      password: 'e2ePassword!',
+    };
+
+    const withdrawRes = await request(app.getHttpServer())
+      .delete('/auth/withdraw')
+      .set('Accept', 'application/json')
+      .send(body);
+
+    expect(withdrawRes.status).toEqual(401);
   });
 
   /*

@@ -67,4 +67,16 @@ export class AuthService {
       refreshToken: refreshToken,
     };
   }
+
+  async logout(user: User) {
+    const _user = await this.userService.update({
+      ...user,
+      refreshToken: null,
+    });
+    return _user.refreshToken === null;
+  }
+
+  async withdraw(user: User) {
+    return !(await this.userService.delete(user.id));
+  }
 }
