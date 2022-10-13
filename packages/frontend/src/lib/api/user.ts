@@ -13,17 +13,23 @@ const userAPI = {
         return error.response;
       })) as AxiosResponse;
   },
+
   register: async (
     displayName: string,
     email: string,
     password: string
   ): AxiosPromise => {
-    return await axios.post(
-      `${SERVER_BASE_URL}/auth/register`,
-      { displayName, email, password },
-      { headers }
-    );
+    return (await axios
+      .post(
+        `${SERVER_BASE_URL}/auth/register`,
+        { displayName, email, password },
+        { headers }
+      )
+      .catch((error: AxiosError) => {
+        return error.response;
+      })) as AxiosResponse;
   },
+
   isAuthenticated: async (): Promise<boolean> => {
     try {
       if (window.localStorage.getItem("accessToken") === null) {
