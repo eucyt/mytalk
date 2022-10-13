@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-  errors: unknown[];
+  errors: string[];
   className?: string;
 }
 

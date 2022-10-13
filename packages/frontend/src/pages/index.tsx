@@ -7,7 +7,7 @@ import PublicLayout from "@/components/Common/Layouts/GuestLayout";
 const Index = () => {
   return (
     <PublicLayout>
-      <Head children={undefined}>
+      <Head>
         <title>MyTalk - Home</title>
       </Head>
       <div className="flex h-screen w-screen items-center justify-center">
