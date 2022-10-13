@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -42,6 +44,7 @@ export class AuthController {
   }
 
   @Post('/login')
+  @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   async login(
     @Body() loginRequest: LoginRequest,
@@ -54,7 +57,7 @@ export class AuthController {
     };
   }
 
-  @Post('/access-token')
+  @Put('/access-token')
   @UseGuards(JwtRefreshAuthGuard)
   async accessToken(
     @Req() req: { user: User; headers: { authorization: string } },
@@ -76,9 +79,10 @@ export class AuthController {
   }
 
   @Post('/logout')
+  @HttpCode(200)
   @UseGuards(JwtRefreshAuthGuard)
   async logout(@Req() req: { user: User }) {
-    return await this.authService.logout(req.user);
+    await this.authService.logout(req.user);
   }
 
   @Delete('/withdraw')
