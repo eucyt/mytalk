@@ -10,7 +10,6 @@ async function main() {
       email: 'test.alice@test.com',
       displayName: 'Alice',
       password: await hash('Password!0Alice', 10),
-      refreshToken: await hash('refreshTokenAlice', 10),
     },
   });
 
@@ -21,7 +20,6 @@ async function main() {
       email: 'test.bob@test.com',
       displayName: 'Bob',
       password: await hash('Password!0Bob', 10),
-      refreshToken: await hash('refreshTokenBob', 10),
     },
   });
   console.log({ alice, bob });
