@@ -2,11 +2,11 @@ import Head from "next/head";
 import React from "react";
 
 import ApplicationLogo from "@/components/Common/ApplicationLogo";
-import PublicLayout from "@/components/Common/Layouts/GuestLayout";
+import GuestLayout from "@/components/Common/Layouts/GuestLayout";
 
 const Index = () => {
   return (
-    <PublicLayout>
+    <GuestLayout>
       <Head>
         <title>MyTalk - Home</title>
       </Head>
@@ -33,7 +33,7 @@ const Index = () => {
           </div>
         </div>
       </div>
-    </PublicLayout>
+    </GuestLayout>
   );
 };
 

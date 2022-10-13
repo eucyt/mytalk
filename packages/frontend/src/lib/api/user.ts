@@ -30,23 +30,18 @@ const userAPI = {
       })) as AxiosResponse;
   },
 
-  isAuthenticated: async (): Promise<boolean> => {
-    try {
-      if (window.localStorage.getItem("accessToken") === null) {
-        return false;
-      }
-      const accessToken = JSON.parse(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        window.localStorage.getItem("accessToken")!
-      ) as string;
-      const { status } = await axios.get(`${SERVER_BASE_URL}/auth`, {
-        headers: { ...headers, accessToken },
-      });
-      return status === 200;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+  me: async (accessToken: string): AxiosPromise => {
+    return (await axios
+      .get(`${SERVER_BASE_URL}/auth`, {
+        headers: {
+          ...headers,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch((error: AxiosError) => {
+        return error.response;
+      })) as AxiosResponse;
   },
 };
 
