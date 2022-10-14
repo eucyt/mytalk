@@ -50,6 +50,29 @@ describe('TalkController (e2e)', () => {
     bobAccessToken = loginBobRes.body.accessToken as string;
   });
 
+  it('OK /talk-invitation/invited (GET)', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talk-invitation/invited')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken);
+    expect(res.status).toEqual(200);
+    expect(res.body.invitations).toEqual([
+      {
+        id: 1,
+        inviterName: alice.displayName,
+      },
+    ]);
+  });
+
+  it('OK /talk-invitation/invited (GET): no invitations', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talk-invitation/invited')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken);
+    expect(res.status).toEqual(200);
+    expect(res.body.invitations).toEqual([]);
+  });
+
   it('NG /talk-invitation/:invitationId/accept (GET): invalid invitee', async () => {
     const res = await request(app.getHttpServer())
       .get('/talk-invitation/1/accept')

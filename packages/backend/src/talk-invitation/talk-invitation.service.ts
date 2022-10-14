@@ -6,6 +6,13 @@ import { PrismaService } from '../prisma/prisma.service';
 export class TalkInvitationService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async findInvitedAll(inviteeId: number) {
+    return await this.prismaService.talkInvitation.findMany({
+      where: { inviteeId: inviteeId },
+      include: { inviter: true },
+    });
+  }
+
   async accept(invitationId: number, inviteeId: number) {
     const invitation = await this.prismaService.talkInvitation.findUnique({
       where: { id: invitationId },

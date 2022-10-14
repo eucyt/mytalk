@@ -8,6 +8,20 @@ import { TalkInvitationService } from './talk-invitation.service';
 export class TalkInvitationController {
   constructor(private readonly talkInvitationService: TalkInvitationService) {}
 
+  @Get('invited')
+  @UseGuards(JwtAuthGuard)
+  async findInvitedAll(@Req() req: { user: User }) {
+    const invitations = await this.talkInvitationService.findInvitedAll(
+      req.user.id,
+    );
+    return {
+      invitations: invitations.map((inv) => ({
+        id: inv.id,
+        inviterName: inv.inviter.displayName,
+      })),
+    };
+  }
+
   @Get(':invitationId/accept')
   @UseGuards(JwtAuthGuard)
   async acceptInvitation(
