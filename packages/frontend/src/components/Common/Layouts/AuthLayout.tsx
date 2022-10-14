@@ -28,7 +28,6 @@ const AuthenticatedLayout: React.VFC<Props> = (props) => {
         );
 
         if (status === 200) {
-          console.log(data.user);
           setUser(data.user);
           return;
         } else if (
