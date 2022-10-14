@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
 import { TalkInvitationModule } from '../src/talk-invitation/talk-invitation.module';
+import { TalkModule } from '../src/talk/talk.module';
 import { resetDatabase } from './detabese-reset';
 
 describe('TalkController (e2e)', () => {
@@ -24,7 +25,7 @@ describe('TalkController (e2e)', () => {
     resetDatabase();
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [TalkInvitationModule],
+      imports: [TalkInvitationModule, TalkModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -47,17 +48,9 @@ describe('TalkController (e2e)', () => {
         password: bob.password,
       });
     bobAccessToken = loginBobRes.body.accessToken as string;
-
-    await request(app.getHttpServer())
-      .post('/talks/2/invite')
-      .set('Accept', 'application/json')
-      .set('Authorization', 'bearer ' + aliceAccessToken)
-      .send({
-        inviteeEmail: bob.email,
-      });
   });
 
-  it('NG /talk-invitation/:invitationId/accept (POST): invalid invitee', async () => {
+  it('NG /talk-invitation/:invitationId/accept (GET): invalid invitee', async () => {
     const res = await request(app.getHttpServer())
       .get('/talk-invitation/1/accept')
       .set('Accept', 'application/json')
@@ -65,15 +58,7 @@ describe('TalkController (e2e)', () => {
     expect(res.status).toEqual(404);
   });
 
-  it('NG /talk-invitation/:invitationId/accept (POST): already accepted', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/talk-invitation/1/accept')
-      .set('Accept', 'application/json')
-      .set('Authorization', 'bearer ' + bobAccessToken);
-    expect(res.status).toEqual(404);
-  });
-
-  it('NG /talk-invitation/:invitationId/accept (POST): invitation does not exist', async () => {
+  it('NG /talk-invitation/:invitationId/accept (GET): invitation does not exist', async () => {
     const res = await request(app.getHttpServer())
       .get('/talk-invitation/999/accept')
       .set('Accept', 'application/json')
@@ -81,12 +66,20 @@ describe('TalkController (e2e)', () => {
     expect(res.status).toEqual(404);
   });
 
-  it('OK /talk-invitation/:invitationId/accept (POST)', async () => {
+  it('OK /talk-invitation/:invitationId/accept (GET)', async () => {
     const res = await request(app.getHttpServer())
       .get('/talk-invitation/1/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(200);
-    expect(res.body).toEqual({ talkId: 2 });
+    expect(res.body).toEqual({ talkId: 1 });
+  });
+
+  it('NG /talk-invitation/:invitationId/accept (GET): already accepted', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talk-invitation/1/accept')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken);
+    expect(res.status).toEqual(404);
   });
 });

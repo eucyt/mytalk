@@ -1,0 +1,27 @@
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class TalkInvitationService {
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async accept(invitationId: number, inviteeId: number) {
+    const invitation = await this.prismaService.talkInvitation.findUnique({
+      where: { id: invitationId },
+    });
+
+    if (
+      !invitation ||
+      invitation.inviteeId !== inviteeId ||
+      invitation.acceptedAt !== null
+    ) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    return await this.prismaService.talkInvitation.update({
+      where: { id: invitationId },
+      data: { acceptedAt: new Date() },
+    });
+  }
+}

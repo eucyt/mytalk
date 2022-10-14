@@ -51,6 +51,12 @@ async function main() {
   });
 
   console.log({ talkAlice, talkAliceBob, talkAliceTom });
+
+  const talkInvitation = await prisma.talkInvitation.create({
+    data: { inviterId: alice.id, inviteeId: bob.id, talkId: talkAlice.id },
+  });
+
+  console.log(talkInvitation);
 }
 
 main()
