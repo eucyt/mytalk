@@ -8,7 +8,7 @@ import { GUEST_REDIRECT_URL } from "@/lib/utils/constant";
 
 interface Props {
   children?: React.ReactNode;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  setUser?: React.Dispatch<React.SetStateAction<User | undefined>>;
 }
 
 // 認証済みの画面
@@ -25,7 +25,9 @@ const AuthLayout: React.VFC<Props> = (props) => {
         );
 
         if (status === 200) {
-          props.setUser(data.user);
+          if (props.setUser !== undefined) {
+            props.setUser(data.user);
+          }
           return;
         } else if (
           status === 401 &&

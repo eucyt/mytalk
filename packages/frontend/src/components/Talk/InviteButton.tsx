@@ -51,7 +51,7 @@ const InviteButton: React.FC<Props> = (props) => {
         props.talkId
       );
       if (status === 201) {
-        // closeModal();
+        closeModal();
       }
     })();
   };

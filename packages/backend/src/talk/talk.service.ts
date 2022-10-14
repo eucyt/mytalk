@@ -32,7 +32,7 @@ export class TalkService {
       where: { id: talkId },
       include: { users: true },
     });
-    if (!talk || !(inviterId in talk.users.map((item) => item.id))) {
+    if (!talk || !talk.users.map((item) => item.id).includes(inviterId)) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 
