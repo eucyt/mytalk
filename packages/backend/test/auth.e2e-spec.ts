@@ -139,7 +139,7 @@ describe('AuthController (e2e)', () => {
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send(body);
-    expect(res.status).toEqual(201);
+    expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('accessToken');
     expect(res.body).toHaveProperty('refreshToken');
   });
@@ -182,8 +182,7 @@ describe('AuthController (e2e)', () => {
       .set('Accept', 'application/json')
       .send(body);
     expect(res.status).toEqual(401);
-    expect(res.body).not.toHaveProperty('accessToken');
-    expect(res.body).not.toHaveProperty('refreshToken');
+    expect(res.body).not.toHaveProperty('user');
   });
 
   it('OK /auth (POST)', async () => {
@@ -203,6 +202,10 @@ describe('AuthController (e2e)', () => {
       .set('Authorization', 'bearer ' + loginRes.body.accessToken);
 
     expect(res.status).toEqual(200);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(res.body.user.displayName).toEqual(alice.displayName);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(res.body.user.email).toEqual(alice.email);
   });
 
   it('OK /auth (POST): Use register', async () => {
@@ -223,6 +226,10 @@ describe('AuthController (e2e)', () => {
       .set('Authorization', 'bearer ' + registerRes.body.accessToken);
 
     expect(res.status).toEqual(200);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(res.body.user.displayName).toEqual(body.displayName);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(res.body.user.email).toEqual(body.email);
   });
 
   it('NG /auth (POST): Invalid accessToken', async () => {
@@ -232,6 +239,8 @@ describe('AuthController (e2e)', () => {
       .set('Authorization', 'Bearer InvalidToken');
 
     expect(res.status).toEqual(401);
+    expect(res.body).not.toHaveProperty('displayName');
+    expect(res.body).not.toHaveProperty('email');
   });
 
   it('OK /auth/access-token (POST)', async () => {
@@ -245,18 +254,18 @@ describe('AuthController (e2e)', () => {
       .send(body);
 
     const renewTokensRes = await request(app.getHttpServer())
-      .post('/auth/access-token')
+      .put('/auth/access-token')
       .set('Accept', 'application/json')
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
-    expect(renewTokensRes.status).toEqual(201);
+    expect(renewTokensRes.status).toEqual(200);
     expect(renewTokensRes.body).toHaveProperty('accessToken');
     expect(renewTokensRes.body).toHaveProperty('refreshToken');
   });
 
   it('NG /auth/access-token (POST): Invalid token', async () => {
     const res = await request(app.getHttpServer())
-      .post('/auth/access-token')
+      .put('/auth/access-token')
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer InvalidToken');
 
@@ -281,7 +290,7 @@ describe('AuthController (e2e)', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
 
-    expect(res.status).toEqual(201);
+    expect(res.status).toEqual(200);
     expect(res.body).not.toHaveProperty('accessToken');
     expect(res.body).not.toHaveProperty('refreshToken');
   });
@@ -349,7 +358,7 @@ describe('AuthController (e2e)', () => {
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send({ email: body.email, password: body.password });
-    expect(loginRes.status).toEqual(201);
+    expect(loginRes.status).toEqual(200);
     expect(loginRes.body).toHaveProperty('accessToken');
     expect(loginRes.body).toHaveProperty('refreshToken');
   });
@@ -365,17 +374,17 @@ describe('AuthController (e2e)', () => {
       .send(body);
 
     const renewTokensRes = await request(app.getHttpServer())
-      .post('/auth/access-token')
+      .put('/auth/access-token')
       .set('Accept', 'application/json')
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
 
     const renewTokensAgainRes = await request(app.getHttpServer())
-      .post('/auth/access-token')
+      .put('/auth/access-token')
       .set('Accept', 'application/json')
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + renewTokensRes.body.refreshToken);
-    expect(renewTokensAgainRes.status).toEqual(201);
+    expect(renewTokensAgainRes.status).toEqual(200);
 
     const res = await request(app.getHttpServer())
       .get('/auth')
@@ -398,11 +407,11 @@ describe('AuthController (e2e)', () => {
       .send(body);
 
     const renewTokensRes = await request(app.getHttpServer())
-      .post('/auth/access-token')
+      .put('/auth/access-token')
       .set('Accept', 'application/json')
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + registerRes.body.refreshToken);
-    expect(renewTokensRes.status).toEqual(201);
+    expect(renewTokensRes.status).toEqual(200);
     expect(renewTokensRes.body).toHaveProperty('accessToken');
     expect(renewTokensRes.body).toHaveProperty('refreshToken');
 
