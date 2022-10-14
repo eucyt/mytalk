@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 
-import AuthLayout from "@/components/Common/Layouts/AuthLayout";
+import AuthLayout from "@/components/Common/Layouts/AuthLayoutWithHeaderFooter";
 import TaskListItem from "@/components/Talk/TalkListItem";
 import talkAPI from "@/lib/api/talk";
 import { Talk } from "@/lib/type/talkType";

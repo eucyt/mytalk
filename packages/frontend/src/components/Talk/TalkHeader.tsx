@@ -3,7 +3,9 @@ import React from "react";
 
 import InviteButton from "@/components/Talk/InviteButton";
 
-interface Props {}
+interface Props {
+  talkId: number;
+}
 const TalkHeader: React.VFC<Props> = (props) => (
   <>
     <div className="flex justify-between border-b-2 border-gray-200 py-3 sm:items-center">
@@ -28,7 +30,7 @@ const TalkHeader: React.VFC<Props> = (props) => (
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <InviteButton />
+        <InviteButton talkId={props.talkId} />
       </div>
     </div>
   </>

@@ -8,6 +8,7 @@ interface Props {
   className?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   autoComplete?: string;
+  placeholder?: string;
   required?: boolean;
   autoFocus?: boolean;
   disabled?: boolean;
@@ -21,6 +22,7 @@ const Input: React.VFC<Props> = ({
   className,
   onChange,
   autoComplete,
+  placeholder,
   required = false,
   autoFocus = false,
   disabled = false,
@@ -33,6 +35,7 @@ const Input: React.VFC<Props> = ({
     /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
     onChange={onChange}
     autoComplete={autoComplete}
+    placeholder={placeholder}
     required={required}
     autoFocus={autoFocus}
     disabled={disabled}
