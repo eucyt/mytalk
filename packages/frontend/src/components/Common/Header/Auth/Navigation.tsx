@@ -61,7 +61,7 @@ const Navigation: React.VFC<Props> = (props) => {
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             <Dropdown
               trigger={
-                <button className="flex items-center text-sm font-medium text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
+                <div className="flex items-center text-sm font-medium text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none">
                   <div>{props.user?.displayName}</div>
 
                   <div className="ml-1">
@@ -77,7 +77,7 @@ const Navigation: React.VFC<Props> = (props) => {
                       />
                     </svg>
                   </div>
-                </button>
+                </div>
               }
             >
               <DropdownButton onClick={logoutOnClick}>Logout</DropdownButton>
