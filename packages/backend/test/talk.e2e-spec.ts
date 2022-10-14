@@ -10,9 +10,14 @@ describe('TalkController (e2e)', () => {
     email: 'test.alice@test.com',
     displayName: 'Alice',
     password: 'Password!0Alice',
-    refreshToken: 'refreshTokenAlice',
   };
-  let accessToken: string;
+  const bob = {
+    email: 'test.bob@test.com',
+    displayName: 'Bob',
+    password: 'Password!0Bob',
+  };
+  let aliceAccessToken: string;
+  let bobAccessToken: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -23,21 +28,29 @@ describe('TalkController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe({ forbidNonWhitelisted: true })); // for class-validator
     await app.init();
 
-    const loginRes = await request(app.getHttpServer())
+    const loginAliceRes = await request(app.getHttpServer())
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send({
         email: alice.email,
         password: alice.password,
       });
-    accessToken = loginRes.body.accessToken as string;
+    aliceAccessToken = loginAliceRes.body.accessToken as string;
+    const loginBobRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Accept', 'application/json')
+      .send({
+        email: bob.email,
+        password: bob.password,
+      });
+    bobAccessToken = loginBobRes.body.accessToken as string;
   });
 
   it('OK /talks (GET)', async () => {
     const res = await request(app.getHttpServer())
       .get('/talks')
       .set('Accept', 'application/json')
-      .set('Authorization', 'bearer ' + accessToken);
+      .set('Authorization', 'bearer ' + aliceAccessToken);
     expect(res.status).toEqual(200);
 
     expect(res.body.length).toEqual(3);
@@ -47,9 +60,61 @@ describe('TalkController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .post('/talks')
       .set('Accept', 'application/json')
-      .set('Authorization', 'bearer ' + accessToken);
+      .set('Authorization', 'bearer ' + aliceAccessToken);
     expect(res.status).toEqual(201);
 
     expect(res.body).toHaveProperty('id');
+  });
+
+  it('OK /talks/:id/invite (POST)', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talks/2/invite')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({
+        inviteeEmail: bob.email,
+      });
+    expect(res.status).toEqual(201);
+    expect(res.body).toEqual({});
+  });
+
+  it('NG /talks/:id/invite (POST): talk does not exist', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talks/999/invite')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({
+        inviteeEmail: bob.email,
+      });
+    expect(res.status).toEqual(401);
+  });
+
+  it('NG /talks/:id/invite (POST): no inviteeEmail', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talks/999/invite')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({});
+    expect(res.status).toEqual(400);
+  });
+
+  it('NG /talks/:id/invite (POST): talk that inviter does not join', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talks/3/invite')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken)
+      .send({ inviteeEmail: bob.email });
+    expect(res.status).toEqual(401);
+  });
+
+  it('NG /talks/:id/invite (POST): invitee dose not exist', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talks/3/invite')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({ inviteeEmail: 'no.user@test.com' });
+    // status code must be 201 because user existence must be private
+    expect(res.status).toEqual(201);
+    expect(res.body).toEqual({});
   });
 });
