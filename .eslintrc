@@ -141,7 +141,8 @@
     {
       "files": ["./packages/**/*spec.ts"],
       "rules": {
-        "sonarjs/no-duplicate-string": "off"
+        "sonarjs/no-duplicate-string": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off"
       }
     },
     {
