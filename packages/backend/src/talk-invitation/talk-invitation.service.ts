@@ -26,6 +26,15 @@ export class TalkInvitationService {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 
+    await this.prismaService.talk.update({
+      where: { id: invitation.talkId },
+      data: {
+        users: {
+          connect: { id: inviteeId },
+        },
+      },
+    });
+
     return await this.prismaService.talkInvitation.update({
       where: { id: invitationId },
       data: { acceptedAt: new Date() },
