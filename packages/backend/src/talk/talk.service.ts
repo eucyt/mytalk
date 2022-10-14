@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
@@ -32,7 +32,7 @@ export class TalkService {
       include: { users: true },
     });
     if (!talk || !(inviterId in talk.users.map((item) => item.id))) {
-      throw new UnauthorizedException();
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 
     const invitee = await this.userService.findByEmail(inviteeEmail);
@@ -42,6 +42,25 @@ export class TalkService {
 
     return this.prismaService.talkInvitation.create({
       data: { talkId: talkId, inviterId: inviterId, inviteeId: invitee.id },
+    });
+  }
+
+  async acceptInvitation(invitationId: number, inviteeId: number) {
+    const invitation = await this.prismaService.talkInvitation.findUnique({
+      where: { id: invitationId },
+    });
+
+    if (
+      !invitation ||
+      invitation.inviteeId !== inviteeId ||
+      invitation.acceptedAt !== null
+    ) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    return await this.prismaService.talkInvitation.update({
+      where: { id: invitationId },
+      data: { acceptedAt: new Date() },
     });
   }
 }

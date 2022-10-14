@@ -86,12 +86,12 @@ describe('TalkController (e2e)', () => {
       .send({
         inviteeEmail: bob.email,
       });
-    expect(res.status).toEqual(401);
+    expect(res.status).toEqual(404);
   });
 
   it('NG /talks/:id/invite (POST): no inviteeEmail', async () => {
     const res = await request(app.getHttpServer())
-      .post('/talks/999/invite')
+      .post('/talks/2/invite')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken)
       .send({});
@@ -104,17 +104,50 @@ describe('TalkController (e2e)', () => {
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken)
       .send({ inviteeEmail: bob.email });
-    expect(res.status).toEqual(401);
+    expect(res.status).toEqual(404);
   });
 
   it('NG /talks/:id/invite (POST): invitee dose not exist', async () => {
     const res = await request(app.getHttpServer())
-      .post('/talks/3/invite')
+      .post('/talks/2/invite')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken)
       .send({ inviteeEmail: 'no.user@test.com' });
     // status code must be 201 because user existence must be private
     expect(res.status).toEqual(201);
     expect(res.body).toEqual({});
+  });
+
+  it('NG /talks/:id/invite/:invitationId/accept (POST): invalid invitee', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talks/2/invite/1/accept')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken);
+    expect(res.status).toEqual(404);
+  });
+
+  it('OK /talks/:id/invite/:invitationId/accept (POST)', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talks/2/invite/1/accept')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken);
+    expect(res.status).toEqual(200);
+    expect(res.body).toEqual({ talkId: 2 });
+  });
+
+  it('NG /talks/:id/invite/:invitationId/accept (POST): already accepted', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talks/2/invite/1/accept')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken);
+    expect(res.status).toEqual(404);
+  });
+
+  it('NG /talks/:id/invite/:invitationId/accept (POST): invitation does not exist', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talks/2/invite/999/accept')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken);
+    expect(res.status).toEqual(404);
   });
 });

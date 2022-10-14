@@ -45,4 +45,17 @@ export class TalkController {
       createTalkInvitationRequest.inviteeEmail,
     );
   }
+
+  @Get(':talkId/invite/:invitationId/accept')
+  @UseGuards(JwtAuthGuard)
+  async acceptInvitation(
+    @Req() req: { user: User },
+    @Param('invitationId') invitationId: string,
+  ) {
+    const invitation = await this.talkService.acceptInvitation(
+      Number(invitationId),
+      req.user.id,
+    );
+    return { talkId: invitation.talkId };
+  }
 }
