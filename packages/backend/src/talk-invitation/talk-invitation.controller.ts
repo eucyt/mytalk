@@ -1,7 +1,16 @@
-import { Controller, Get, Param, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  UseGuards,
+  Req,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreateTalkInvitationRequest } from './talk-invitation.entity';
 import { TalkInvitationService } from './talk-invitation.service';
 
 @Controller('talk-invitation')
@@ -20,6 +29,18 @@ export class TalkInvitationController {
         inviterName: inv.inviter.displayName,
       })),
     };
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  async create(
+    @Req() req: { user: User },
+    @Body() createTalkInvitationRequest: CreateTalkInvitationRequest,
+  ) {
+    await this.talkInvitationService.create(
+      req.user.id,
+      createTalkInvitationRequest.inviteeEmail,
+    );
   }
 
   @Get(':invitationId/accept')

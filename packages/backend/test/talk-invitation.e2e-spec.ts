@@ -105,4 +105,30 @@ describe('TalkController (e2e)', () => {
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(404);
   });
+
+  it('OK /talk-invitation/ (POST)', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talk-invitation/')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({ inviteeEmail: bob.email });
+    expect(res.status).toEqual(201);
+  });
+
+  it('NG /talk-invitation/ (POST): invitee dose not exist', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talk-invitation/')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({ inviteeEmail: 'no.user@test.com' });
+    expect(res.status).toEqual(201);
+  });
+
+  it('NG /talk-invitation/ (POST): no invitee', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/talk-invitation/')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken);
+    expect(res.status).toEqual(400);
+  });
 });

@@ -1,10 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class TalkInvitationService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly userService: UserService,
+  ) {}
 
   async findInvitedAll(inviteeId: number) {
     return await this.prismaService.talkInvitation.findMany({
@@ -26,18 +30,39 @@ export class TalkInvitationService {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 
-    await this.prismaService.talk.update({
-      where: { id: invitation.talkId },
-      data: {
-        users: {
-          connect: { id: inviteeId },
+    if (invitation.talkId !== null) {
+      await this.prismaService.talk.update({
+        where: { id: invitation.talkId },
+        data: {
+          users: {
+            connect: { id: inviteeId },
+          },
         },
-      },
-    });
+      });
+    } else {
+      await this.prismaService.talk.create({
+        data: {
+          users: {
+            connect: [{ id: inviteeId }, { id: invitation.inviterId }],
+          },
+        },
+      });
+    }
 
     return await this.prismaService.talkInvitation.update({
       where: { id: invitationId },
-      data: { acceptedAt: new Date() },
+      data: { acceptedAt: new Date(), talkId: invitation.talkId },
+    });
+  }
+
+  async create(inviterId: number, inviteeEmail: string) {
+    const invitee = await this.userService.findByEmail(inviteeEmail);
+    if (!invitee) {
+      return null;
+    }
+
+    return this.prismaService.talkInvitation.create({
+      data: { inviterId: inviterId, inviteeId: invitee.id },
     });
   }
 }

@@ -10,7 +10,7 @@ import {
 import { User } from '@prisma/client';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateTalkInvitationRequest, CreateTalkRequest } from './talk.entity';
+import { InviteToTalkRequest, CreateTalkRequest } from './talk.entity';
 import { TalkService } from './talk.service';
 
 @Controller('talks')
@@ -46,9 +46,9 @@ export class TalkController {
   async invite(
     @Param('id') talkId: string,
     @Req() req: { user: User },
-    @Body() createTalkInvitationRequest: CreateTalkInvitationRequest,
+    @Body() createTalkInvitationRequest: InviteToTalkRequest,
   ) {
-    await this.talkService.invite(
+    await this.talkService.inviteToTalk(
       Number(talkId),
       req.user.id,
       createTalkInvitationRequest.inviteeEmail,

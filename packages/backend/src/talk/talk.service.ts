@@ -27,7 +27,7 @@ export class TalkService {
     });
   }
 
-  async invite(talkId: number, inviterId: number, inviteeEmail: string) {
+  async inviteToTalk(talkId: number, inviterId: number, inviteeEmail: string) {
     const talk = await this.prismaService.talk.findUnique({
       where: { id: talkId },
       include: { users: true },

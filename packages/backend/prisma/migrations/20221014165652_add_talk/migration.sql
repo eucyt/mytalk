@@ -8,7 +8,7 @@ CREATE TABLE `Talk` (
 -- CreateTable
 CREATE TABLE `TalkInvitation` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `talkId` INTEGER NOT NULL,
+    `talkId` INTEGER NULL,
     `inviterId` INTEGER NOT NULL,
     `inviteeId` INTEGER NOT NULL,
     `invitedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -28,7 +28,7 @@ CREATE TABLE `_TalkToUser` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `TalkInvitation` ADD CONSTRAINT `TalkInvitation_talkId_fkey` FOREIGN KEY (`talkId`) REFERENCES `Talk`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `TalkInvitation` ADD CONSTRAINT `TalkInvitation_talkId_fkey` FOREIGN KEY (`talkId`) REFERENCES `Talk`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `TalkInvitation` ADD CONSTRAINT `TalkInvitation_inviterId_fkey` FOREIGN KEY (`inviterId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
