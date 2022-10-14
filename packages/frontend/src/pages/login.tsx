@@ -30,14 +30,8 @@ const Login: React.VFC = () => {
       switch (status) {
         case 200:
           if (data.accessToken && data.refreshToken) {
-            window.localStorage.setItem(
-              "accessToken",
-              JSON.stringify(data.accessToken)
-            );
-            window.localStorage.setItem(
-              "refreshToken",
-              JSON.stringify(data.refreshToken)
-            );
+            window.localStorage.setItem("accessToken", data.accessToken);
+            window.localStorage.setItem("refreshToken", data.refreshToken);
             await router.push(AUTHED_REDIRECT_URL);
           }
           break;

@@ -43,6 +43,19 @@ const userAPI = {
         return error.response;
       })) as AxiosResponse;
   },
+  refresh: async (refreshToken: string): AxiosPromise => {
+    return (await axios
+      .put(`${SERVER_BASE_URL}/auth/access-token`, {
+        headers: {
+          ...headers,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      })
+      .catch((error: AxiosError) => {
+        return error.response;
+      })) as AxiosResponse;
+  },
 };
 
 export default userAPI;

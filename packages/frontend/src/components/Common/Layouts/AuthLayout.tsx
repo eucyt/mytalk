@@ -22,13 +22,31 @@ const AuthenticatedLayout: React.VFC<Props> = (props) => {
   useEffect(() => {
     void (async () => {
       if (window.localStorage.getItem("accessToken") !== null) {
+        // get user data
         const { data, status } = await userAPI.me(
           window.localStorage.getItem("accessToken")!
         );
+
         if (status === 200) {
           setUser(data.user);
+          return;
+        } else if (
+          status === 401 &&
+          window.localStorage.getItem("refreshToken") !== null
+        ) {
+          // refresh tokens
+          const { data, status } = await userAPI.refresh(
+            window.localStorage.getItem("refreshToken")!
+          );
+          if (status === 200) {
+            setUser(data.user);
+            window.localStorage.setItem("accessToken", data.accessToken);
+            window.localStorage.setItem("refreshToken", data.refreshToken);
+            return;
+          }
         }
-      } else {
+        window.localStorage.removeItem("accessToken");
+        window.localStorage.removeItem("refreshToken");
         await router.push(GUEST_REDIRECT_URL);
       }
     })();

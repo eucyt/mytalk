@@ -19,6 +19,7 @@ const Navigation: React.VFC<Props> = (props) => {
 
   const logoutOnClick = () => {
     props.setLoading(true);
+
     // TODO: ログアウトを実装
     // logout();
   };
