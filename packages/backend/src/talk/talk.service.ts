@@ -40,8 +40,17 @@ export class TalkService {
       return null;
     }
 
-    return this.prismaService.talkInvitation.create({
-      data: { talkId: talkId, inviterId: inviterId, inviteeId: invitee.id },
+    return this.prismaService.talkInvitation.upsert({
+      where: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        talkId_inviterId_inviteeId: {
+          talkId: talkId,
+          inviterId: inviterId,
+          inviteeId: invitee.id,
+        },
+      },
+      create: { talkId: talkId, inviterId: inviterId, inviteeId: invitee.id },
+      update: {},
     });
   }
 }

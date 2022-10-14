@@ -39,4 +39,5 @@ model TalkInvitation {
     inviteeId       Int
     invitedAt       DateTime            @default(now())
     acceptedAt      DateTime?
+    @@unique([talkId, inviterId, inviteeId])
 }

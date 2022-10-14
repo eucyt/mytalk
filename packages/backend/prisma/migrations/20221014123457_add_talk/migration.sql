@@ -14,6 +14,7 @@ CREATE TABLE `TalkInvitation` (
     `invitedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `acceptedAt` DATETIME(3) NULL,
 
+    UNIQUE INDEX `TalkInvitation_talkId_inviterId_inviteeId_key`(`talkId`, `inviterId`, `inviteeId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
