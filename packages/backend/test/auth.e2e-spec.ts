@@ -198,13 +198,13 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + loginRes.body.accessToken);
 
     expect(res.status).toEqual(200);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
     expect(res.body.user.displayName).toEqual(alice.displayName);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
     expect(res.body.user.email).toEqual(alice.email);
   });
 
@@ -222,13 +222,13 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + registerRes.body.accessToken);
 
     expect(res.status).toEqual(200);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
     expect(res.body.user.displayName).toEqual(body.displayName);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
     expect(res.body.user.email).toEqual(body.email);
   });
 
@@ -256,7 +256,7 @@ describe('AuthController (e2e)', () => {
     const renewTokensRes = await request(app.getHttpServer())
       .put('/auth/access-token')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
     expect(renewTokensRes.status).toEqual(200);
     expect(renewTokensRes.body).toHaveProperty('accessToken');
@@ -287,7 +287,7 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .post('/auth/logout')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
 
     expect(res.status).toEqual(200);
@@ -376,20 +376,20 @@ describe('AuthController (e2e)', () => {
     const renewTokensRes = await request(app.getHttpServer())
       .put('/auth/access-token')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + loginRes.body.refreshToken);
 
     const renewTokensAgainRes = await request(app.getHttpServer())
       .put('/auth/access-token')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + renewTokensRes.body.refreshToken);
     expect(renewTokensAgainRes.status).toEqual(200);
 
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + renewTokensAgainRes.body.accessToken);
 
     expect(res.status).toEqual(200);
@@ -409,7 +409,7 @@ describe('AuthController (e2e)', () => {
     const renewTokensRes = await request(app.getHttpServer())
       .put('/auth/access-token')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'Bearer ' + registerRes.body.refreshToken);
     expect(renewTokensRes.status).toEqual(200);
     expect(renewTokensRes.body).toHaveProperty('accessToken');
@@ -418,7 +418,7 @@ describe('AuthController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .get('/auth')
       .set('Accept', 'application/json')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-plus-operands
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       .set('Authorization', 'bearer ' + registerRes.body.accessToken);
 
     expect(res.status).toEqual(200);

@@ -11,11 +11,32 @@ datasource db {
 }
 
 model User {
-    id              Int     @id @default(autoincrement())
+    id              Int                 @id @default(autoincrement())
     displayName     String
-    email           String  @unique
+    email           String              @unique
     password        String
     refreshToken    String?
-    createdAt       DateTime @default(now())
-    updatedAt       DateTime @updatedAt
+    talks           Talk[]
+    invitingTalk    TalkInvitation[]    @relation("InvitingTalk")
+    invitedTalk     TalkInvitation[]    @relation("InvitedTalk")
+    createdAt       DateTime            @default(now())
+    updatedAt       DateTime            @updatedAt
+}
+
+model Talk {
+    id              Int                 @id @default(autoincrement())
+    users           User[]
+    talkInvitations TalkInvitation[]
+}
+
+model TalkInvitation {
+    id              Int                 @id @default(autoincrement())
+    talk            Talk                @relation(fields: [talkId], references: [id])
+    talkId          Int
+    inviter         User                @relation(name: "InvitingTalk", fields: [inviterId], references: [id])
+    inviterId       Int
+    invitee         User                @relation(name: "InvitedTalk", fields: [inviteeId], references: [id])
+    inviteeId       Int
+    invitedAt       DateTime            @default(now())
+    acceptedAt      DateTime?
 }

@@ -22,7 +22,35 @@ async function main() {
       password: await hash('Password!0Bob', 10),
     },
   });
-  console.log({ alice, bob });
+
+  const tom = await prisma.user.upsert({
+    where: { email: 'test.tom@test.com' },
+    update: {},
+    create: {
+      email: 'test.tom@test.com',
+      displayName: 'Tom',
+      password: await hash('Password!0Tom', 10),
+    },
+  });
+
+  console.log({ alice, bob, tom });
+
+  const talkAlice = await prisma.talk.create({
+    data: { users: { connect: [{ id: alice.id }] } },
+    include: { users: true },
+  });
+
+  const talkAliceBob = await prisma.talk.create({
+    data: { users: { connect: [{ id: alice.id }, { id: bob.id }] } },
+    include: { users: true },
+  });
+
+  const talkAliceTom = await prisma.talk.create({
+    data: { users: { connect: [{ id: alice.id }, { id: tom.id }] } },
+    include: { users: true },
+  });
+
+  console.log({ talkAlice, talkAliceBob, talkAliceTom });
 }
 
 main()
