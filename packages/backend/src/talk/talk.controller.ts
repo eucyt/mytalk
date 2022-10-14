@@ -23,13 +23,19 @@ export class TalkController {
     @Body() createTalkRequest: CreateTalkRequest,
     @Req() req: { user: User },
   ) {
-    return await this.talkService.create(req.user.id);
+    const talk = await this.talkService.create(req.user.id);
+    return { id: talk.id };
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
   async findAll(@Req() req: { user: User }) {
-    return await this.talkService.findAll(req.user.id);
+    const talks = await this.talkService.findAll(req.user.id);
+    return {
+      talks: talks.map((talk) => ({
+        id: talk.id,
+      })),
+    };
   }
 
   @Post(':id/invite')

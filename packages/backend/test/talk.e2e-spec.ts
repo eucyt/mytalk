@@ -56,7 +56,7 @@ describe('TalkController (e2e)', () => {
       .set('Authorization', 'bearer ' + aliceAccessToken);
     expect(res.status).toEqual(200);
 
-    expect(res.body.length).toEqual(3);
+    expect(res.body.talks.length).toEqual(3);
   });
 
   it('OK /talks (POST)', async () => {
