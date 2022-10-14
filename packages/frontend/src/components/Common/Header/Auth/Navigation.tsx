@@ -8,6 +8,7 @@ import { DropdownButton } from "@/components/Common/Header/Auth/DropdownLink";
 import NavLink from "@/components/Common/Header/Auth/NavLink";
 import { ResponsiveNavButton } from "@/components/Common/Header/Auth/ResponsiveNavLink";
 import { User } from "@/lib/type/userType";
+import { GUEST_REDIRECT_URL } from "@/lib/utils/constant";
 
 interface Props {
   user?: User;
@@ -20,17 +21,20 @@ const Navigation: React.VFC<Props> = (props) => {
   const logoutOnClick = () => {
     props.setLoading(true);
 
-    // TODO: ログアウトを実装
-    // logout();
+    // TODO: logout()
+    // await userAPI.logout(window.localStorage.getItem("refreshToken")!);
+    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("refreshToken");
+    void router.push(GUEST_REDIRECT_URL);
   };
-  const withdrawOnClick = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm("退会してもよろしいですか？\n作成したデータは消去されます。")) {
-      props.setLoading(true);
-      // TODO: 退会を実装
-      // withdraw();
-    }
-  };
+
+  // TODO: 退会を実装
+  // const withdrawOnClick = () => {
+  //   if (confirm("退会してもよろしいですか？\n作成したデータは消去されます。")) {
+  //     props.setLoading(true);
+  //     withdraw();
+  //   }
+  // };
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -82,9 +86,9 @@ const Navigation: React.VFC<Props> = (props) => {
               }
             >
               <DropdownButton onClick={logoutOnClick}>Logout</DropdownButton>
-              <DropdownButton onClick={withdrawOnClick}>
-                Withdraw
-              </DropdownButton>
+              {/*<DropdownButton onClick={withdrawOnClick}>*/}
+              {/*  Withdraw*/}
+              {/*</DropdownButton>*/}
             </Dropdown>
           </div>
 
@@ -159,9 +163,9 @@ const Navigation: React.VFC<Props> = (props) => {
               <ResponsiveNavButton onClick={logoutOnClick}>
                 Logout
               </ResponsiveNavButton>
-              <ResponsiveNavButton onClick={withdrawOnClick}>
-                Withdraw
-              </ResponsiveNavButton>
+              {/*<ResponsiveNavButton onClick={withdrawOnClick}>*/}
+              {/*  Withdraw*/}
+              {/*</ResponsiveNavButton>*/}
             </div>
           </div>
         </div>

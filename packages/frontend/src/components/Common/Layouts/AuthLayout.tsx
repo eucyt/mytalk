@@ -28,27 +28,28 @@ const AuthenticatedLayout: React.VFC<Props> = (props) => {
         );
 
         if (status === 200) {
+          console.log(data.user);
           setUser(data.user);
           return;
         } else if (
           status === 401 &&
           window.localStorage.getItem("refreshToken") !== null
         ) {
-          // refresh tokens
-          const { data, status } = await userAPI.refresh(
-            window.localStorage.getItem("refreshToken")!
-          );
-          if (status === 200) {
-            setUser(data.user);
-            window.localStorage.setItem("accessToken", data.accessToken);
-            window.localStorage.setItem("refreshToken", data.refreshToken);
-            return;
-          }
+          // TODO: refresh tokens
+          // const { data, status } = await userAPI.refresh(
+          //   window.localStorage.getItem("refreshToken")!
+          // );
+          // if (status === 200) {
+          //   setUser(data.user);
+          //   window.localStorage.setItem("accessToken", data.accessToken);
+          //   window.localStorage.setItem("refreshToken", data.refreshToken);
+          //   return;
+          // }
         }
-        window.localStorage.removeItem("accessToken");
-        window.localStorage.removeItem("refreshToken");
-        await router.push(GUEST_REDIRECT_URL);
       }
+      window.localStorage.removeItem("accessToken");
+      window.localStorage.removeItem("refreshToken");
+      await router.push(GUEST_REDIRECT_URL);
     })();
   }, [router]);
 
