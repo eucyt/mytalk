@@ -23,6 +23,7 @@ export class TalkService {
       where: {
         users: { some: { id: userId } },
       },
+      include: { users: true },
     });
   }
 

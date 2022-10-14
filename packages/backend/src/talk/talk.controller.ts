@@ -34,6 +34,9 @@ export class TalkController {
     return {
       talks: talks.map((talk) => ({
         id: talk.id,
+        users: talk.users.map((user) => ({
+          name: user.displayName,
+        })),
       })),
     };
   }

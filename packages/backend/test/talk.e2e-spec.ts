@@ -57,6 +57,7 @@ describe('TalkController (e2e)', () => {
     expect(res.status).toEqual(200);
 
     expect(res.body.talks.length).toEqual(3);
+    expect(res.body.talks[0].users).toEqual([{ name: 'Alice' }]);
   });
 
   it('OK /talks (POST)', async () => {
