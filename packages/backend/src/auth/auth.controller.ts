@@ -75,7 +75,9 @@ export class AuthController {
   @Get('/')
   @UseGuards(JwtAuthGuard)
   getMe(@Req() req: { user: User }) {
-    return { displayName: req.user.displayName, email: req.user.email };
+    return {
+      user: { displayName: req.user.displayName, email: req.user.email },
+    };
   }
 
   @Post('/logout')

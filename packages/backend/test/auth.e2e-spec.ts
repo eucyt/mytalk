@@ -182,8 +182,7 @@ describe('AuthController (e2e)', () => {
       .set('Accept', 'application/json')
       .send(body);
     expect(res.status).toEqual(401);
-    expect(res.body).not.toHaveProperty('accessToken');
-    expect(res.body).not.toHaveProperty('refreshToken');
+    expect(res.body).not.toHaveProperty('user');
   });
 
   it('OK /auth (POST)', async () => {
@@ -204,9 +203,9 @@ describe('AuthController (e2e)', () => {
 
     expect(res.status).toEqual(200);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(res.body.displayName).toEqual(alice.displayName);
+    expect(res.body.user.displayName).toEqual(alice.displayName);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(res.body.email).toEqual(alice.email);
+    expect(res.body.user.email).toEqual(alice.email);
   });
 
   it('OK /auth (POST): Use register', async () => {
@@ -228,9 +227,9 @@ describe('AuthController (e2e)', () => {
 
     expect(res.status).toEqual(200);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(res.body.displayName).toEqual(body.displayName);
+    expect(res.body.user.displayName).toEqual(body.displayName);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(res.body.email).toEqual(body.email);
+    expect(res.body.user.email).toEqual(body.email);
   });
 
   it('NG /auth (POST): Invalid accessToken', async () => {
