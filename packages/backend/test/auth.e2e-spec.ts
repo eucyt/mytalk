@@ -8,6 +8,7 @@ import {
   WithdrawRequest,
 } from '../src/auth/auth.entity';
 import { AuthModule } from '../src/auth/auth.module';
+import { resetDatabase } from './detabese-reset';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -19,6 +20,8 @@ describe('AuthController (e2e)', () => {
   };
 
   beforeAll(async () => {
+    resetDatabase();
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AuthModule],
     }).compile();

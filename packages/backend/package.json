@@ -15,7 +15,7 @@
     "start:prod": "node dist/main",
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "dotenv -e .env.test -- prisma migrate reset --force && dotenv -e .env.test jest",
-    "test:e2e": "dotenv -e .env.test -- prisma migrate reset --force && dotenv -e .env.test -- node --trace-warnings node_modules/.bin/jest --no-cache --config ./test/jest-e2e.json"
+    "test:e2e": "dotenv -e .env.test -- node --trace-warnings node_modules/.bin/jest --no-cache --config ./test/jest-e2e.json -i"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
