@@ -14,11 +14,13 @@ const TaskListItem: React.VFC<Props> = (props) => (
       {/*  TODO: latest message datetime*/}
       {/*</div>*/}
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pink-500 font-bold text-pink-300">
-        名{/* TODO: member name initial */}
+        {props.talkMemberNames.length !== 0 ? props.talkMemberNames[0][0] : ""}
       </div>
       <div className="ml-3 flex w-4/5 grow flex-col">
         <div className="text-sm font-medium">
-          {props.talkMemberNames.join(", ")}
+          {props.talkMemberNames.length !== 0
+            ? props.talkMemberNames.join(", ")
+            : "No Member"}
         </div>
         <div className="max-w-full  truncate text-xs">
           {/* TODO: latest message */}

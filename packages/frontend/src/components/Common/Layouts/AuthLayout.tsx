@@ -57,7 +57,7 @@ const AuthLayout: React.VFC<Props> = (props) => {
         <meta name="robots" content="noindex,nofollow" />
         <title>MyTalk</title>
       </Head>
-      <main className="">{props.children}</main>
+      <main>{props.children}</main>
     </>
   );
 };
