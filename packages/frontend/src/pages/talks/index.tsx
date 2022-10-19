@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 
 import AuthLayout from "@/components/Common/Layouts/AuthLayoutWithHeaderFooter";
-import TaskListItem from "@/components/Talk/TalkListItem";
+import TalkList from "@/components/Talk/TalkList";
 import talkAPI from "@/lib/api/talk";
 import { Talk } from "@/lib/type/talkType";
 
@@ -15,7 +15,23 @@ const Index = () => {
         window.localStorage.getItem("accessToken")!
       );
       if (status === 200) {
-        setTalks(data.talks);
+        setTalks(
+          data.talks.concat(
+            data.talks.concat(
+              data.talks.concat(
+                data.talks.concat(
+                  data.talks.concat(
+                    data.talks.concat(
+                      data.talks.concat(
+                        data.talks.concat(data.talks.concat(data.talks))
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
       }
     })();
   }, []);
@@ -25,20 +41,11 @@ const Index = () => {
       <Head>
         <title>MyTalk - Talk</title>
       </Head>
-      <div className="flex min-h-screen flex-col items-center bg-gray-100 sm:justify-center sm:pt-6">
-        <ul className="w-full overflow-hidden px-6 py-4 sm:mt-6 sm:max-w-md sm:rounded-lg sm:bg-white sm:shadow-md">
-          {talks?.map((talk, i) => {
-            return (
-              <li key={talk.id}>
-                <TaskListItem
-                  id={talk.id}
-                  talkMemberNames={talk.users.map((user) => user.name)}
-                  isBottom={talks.length - 1 === i}
-                />
-              </li>
-            );
-          })}
-        </ul>
+
+      <div className="flex h-[calc(100vh-64px)] flex-col items-center bg-gray-100 p-2 sm:p-12">
+        <div className="h-full w-full bg-white px-6 py-4 sm:max-w-lg sm:rounded-lg sm:shadow-md md:max-w-xl lg:max-w-2xl">
+          <TalkList talks={talks} />
+        </div>
       </div>
     </AuthLayout>
   );

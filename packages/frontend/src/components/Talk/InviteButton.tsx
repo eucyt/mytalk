@@ -42,6 +42,7 @@ const InviteButton: React.FC<Props> = (props) => {
     },
   };
 
+  // TODO: トークルームの作成時に招待をする。招待承認時にトークルームを作成する。後から招待できるような拡張性も考える。大体これを/talksに移動する
   const invite = (event) => {
     void (async () => {
       event.preventDefault();

@@ -1,25 +1,40 @@
 import React from "react";
 
-import PersonIcon from "@/components/Common/PersonIcon";
-
 interface Props {
   id: number;
   talkMemberNames: string[];
-  isBottom: boolean;
 }
 const TaskListItem: React.VFC<Props> = (props) => (
-  <>
-    <a
-      href={`/talks/${props.id}`}
-      className={
-        "flex w-full border-b-gray-300 p-6 transition duration-150 ease-in-out hover:bg-gray-100 " +
-        (props.isBottom ? "" : "border-b")
-      }
-    >
-      <PersonIcon />
-      <p>{props.talkMemberNames.join(", ")}</p>
-    </a>
-  </>
+  <a
+    href={"/talks/" + props.id.toString()}
+    className="transition duration-150 hover:opacity-50"
+  >
+    <div className="relative flex flex-row items-center p-4">
+      {/*<div className="absolute right-0 top-0 mr-4 mt-3 text-xs text-gray-500">*/}
+      {/*  TODO: latest message datetime*/}
+      {/*</div>*/}
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pink-500 font-bold text-pink-300">
+        名{/* TODO: member name initial */}
+      </div>
+      <div className="ml-3 flex w-4/5 grow flex-col">
+        <div className="text-sm font-medium">
+          {props.talkMemberNames.join(", ")}
+        </div>
+        <div className="max-w-full  truncate text-xs">
+          {/* TODO: latest message */}
+          Good after noon! how can i help you? Good after noon! how can i help
+          you? Good after noon! how can i help you? Good after noon! how can i
+          help you?
+        </div>
+      </div>
+      {/*<div className="ml-2 mb-1 shrink-0 self-end">*/}
+      {/*  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">*/}
+      {/*    3*/}
+      {/* TODO: unread count */}
+      {/*</span>*/}
+      {/*</div>*/}
+    </div>
+  </a>
 );
 
 export default TaskListItem;
