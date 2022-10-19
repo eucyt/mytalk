@@ -12,7 +12,7 @@ export class TalkInvitationService {
 
   async findInvitedAll(inviteeId: number) {
     return await this.prismaService.talkInvitation.findMany({
-      where: { inviteeId: inviteeId },
+      where: { inviteeId: inviteeId, acceptedAt: null },
       include: { inviter: true },
     });
   }

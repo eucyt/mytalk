@@ -73,34 +73,34 @@ describe('TalkController (e2e)', () => {
     expect(res.body.invitations).toEqual([]);
   });
 
-  it('NG /talk-invitations/:invitationId/accept (GET): invalid invitee', async () => {
+  it('NG /talk-invitations/:invitationId/accept (POST): invalid invitee', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitations/1/accept')
+      .post('/talk-invitations/1/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken);
     expect(res.status).toEqual(404);
   });
 
-  it('NG /talk-invitations/:invitationId/accept (GET): invitation does not exist', async () => {
+  it('NG /talk-invitations/:invitationId/accept (POST): invitation does not exist', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitations/999/accept')
+      .post('/talk-invitations/999/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(404);
   });
 
-  it('OK /talk-invitations/:invitationId/accept (GET)', async () => {
+  it('OK /talk-invitations/:invitationId/accept (POST)', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitations/1/accept')
+      .post('/talk-invitations/1/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(201);
     expect(res.body).toEqual({ talkId: 1 });
   });
 
-  it('NG /talk-invitations/:invitationId/accept (GET): already accepted', async () => {
+  it('NG /talk-invitations/:invitationId/accept (POST): already accepted', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitations/1/accept')
+      .post('/talk-invitations/1/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(404);
