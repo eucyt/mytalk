@@ -13,7 +13,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateTalkInvitationRequest } from './talk-invitation.entity';
 import { TalkInvitationService } from './talk-invitation.service';
 
-@Controller('talk-invitation')
+@Controller('talk-invitations')
 export class TalkInvitationController {
   constructor(private readonly talkInvitationService: TalkInvitationService) {}
 

@@ -50,9 +50,9 @@ describe('TalkController (e2e)', () => {
     bobAccessToken = loginBobRes.body.accessToken as string;
   });
 
-  it('OK /talk-invitation/invited (GET)', async () => {
+  it('OK /talk-invitations/invited (GET)', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitation/invited')
+      .get('/talk-invitations/invited')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(200);
@@ -64,69 +64,69 @@ describe('TalkController (e2e)', () => {
     ]);
   });
 
-  it('OK /talk-invitation/invited (GET): no invitations', async () => {
+  it('OK /talk-invitations/invited (GET): no invitations', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitation/invited')
+      .get('/talk-invitations/invited')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken);
     expect(res.status).toEqual(200);
     expect(res.body.invitations).toEqual([]);
   });
 
-  it('NG /talk-invitation/:invitationId/accept (GET): invalid invitee', async () => {
+  it('NG /talk-invitations/:invitationId/accept (GET): invalid invitee', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitation/1/accept')
+      .get('/talk-invitations/1/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken);
     expect(res.status).toEqual(404);
   });
 
-  it('NG /talk-invitation/:invitationId/accept (GET): invitation does not exist', async () => {
+  it('NG /talk-invitations/:invitationId/accept (GET): invitation does not exist', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitation/999/accept')
+      .get('/talk-invitations/999/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(404);
   });
 
-  it('OK /talk-invitation/:invitationId/accept (GET)', async () => {
+  it('OK /talk-invitations/:invitationId/accept (GET)', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitation/1/accept')
+      .get('/talk-invitations/1/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(200);
     expect(res.body).toEqual({ talkId: 1 });
   });
 
-  it('NG /talk-invitation/:invitationId/accept (GET): already accepted', async () => {
+  it('NG /talk-invitations/:invitationId/accept (GET): already accepted', async () => {
     const res = await request(app.getHttpServer())
-      .get('/talk-invitation/1/accept')
+      .get('/talk-invitations/1/accept')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + bobAccessToken);
     expect(res.status).toEqual(404);
   });
 
-  it('OK /talk-invitation/ (POST)', async () => {
+  it('OK /talk-invitations/ (POST)', async () => {
     const res = await request(app.getHttpServer())
-      .post('/talk-invitation/')
+      .post('/talk-invitations/')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken)
       .send({ inviteeEmail: bob.email });
     expect(res.status).toEqual(201);
   });
 
-  it('NG /talk-invitation/ (POST): invitee dose not exist', async () => {
+  it('NG /talk-invitations/ (POST): invitee dose not exist', async () => {
     const res = await request(app.getHttpServer())
-      .post('/talk-invitation/')
+      .post('/talk-invitations/')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken)
       .send({ inviteeEmail: 'no.user@test.com' });
     expect(res.status).toEqual(201);
   });
 
-  it('NG /talk-invitation/ (POST): no invitee', async () => {
+  it('NG /talk-invitations/ (POST): no invitee', async () => {
     const res = await request(app.getHttpServer())
-      .post('/talk-invitation/')
+      .post('/talk-invitations/')
       .set('Accept', 'application/json')
       .set('Authorization', 'bearer ' + aliceAccessToken);
     expect(res.status).toEqual(400);

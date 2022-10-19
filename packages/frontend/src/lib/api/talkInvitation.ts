@@ -12,7 +12,7 @@ const talkInvitationAPI = {
   ): AxiosPromise => {
     return (await axios
       .post(
-        `${SERVER_BASE_URL}/talk-invitation`,
+        `${SERVER_BASE_URL}/talk-invitations`,
         { inviteeEmail: inviteeEmail },
         {
           headers: {
