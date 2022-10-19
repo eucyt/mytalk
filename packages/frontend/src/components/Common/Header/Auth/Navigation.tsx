@@ -61,6 +61,14 @@ const Navigation: React.VFC<Props> = (props) => {
                 Talks
               </NavLink>
             </div>
+            <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+              <NavLink
+                href="/talk-invitations/"
+                active={router.pathname === "/talk-invitations"}
+              >
+                Invitations
+              </NavLink>
+            </div>
           </div>
 
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -160,6 +168,20 @@ const Navigation: React.VFC<Props> = (props) => {
             </div>
 
             <div className="mt-3 space-y-1">
+              <ResponsiveNavButton
+                onClick={() => {
+                  void router.push("/talks");
+                }}
+              >
+                Talks
+              </ResponsiveNavButton>
+              <ResponsiveNavButton
+                onClick={() => {
+                  void router.push("/talk-invitations");
+                }}
+              >
+                Invitations
+              </ResponsiveNavButton>
               <ResponsiveNavButton onClick={logoutOnClick}>
                 Logout
               </ResponsiveNavButton>

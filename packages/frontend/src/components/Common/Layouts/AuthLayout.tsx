@@ -9,6 +9,7 @@ import { GUEST_REDIRECT_URL } from "@/lib/utils/constant";
 interface Props {
   children?: React.ReactNode;
   setUser?: React.Dispatch<React.SetStateAction<User | undefined>>;
+  title: string;
 }
 
 // 認証済みの画面
@@ -56,7 +57,7 @@ const AuthLayout: React.VFC<Props> = (props) => {
     <>
       <Head>
         <meta name="robots" content="noindex,nofollow" />
-        <title>MyTalk</title>
+        <title>{props.title}</title>
       </Head>
       <main>{props.children}</main>
     </>

@@ -10,6 +10,7 @@ interface Props {
   children?: React.ReactNode;
   user: User | undefined;
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  title: string;
 }
 
 // 認証済みの画面
@@ -21,19 +22,14 @@ const AuthLayoutWithHeaderFooter: React.VFC<Props> = (props) => {
       <>
         <Head>
           <meta name="robots" content="noindex,nofollow" />
-          <title>MyTalk</title>
+          <title>{props.title}</title>
         </Head>
         <FullSizeLoading />
       </>
     );
   } else {
     return (
-      <AuthLayout setUser={props.setUser}>
-        <Head>
-          <meta name="robots" content="noindex,nofollow" />
-          <title>MyTalk</title>
-        </Head>
-
+      <AuthLayout setUser={props.setUser} title={props.title}>
         <div className="min-h-screen bg-gray-100">
           <Navigation user={props.user} setLoading={setLoading} />
           <main>{props.children}</main>
