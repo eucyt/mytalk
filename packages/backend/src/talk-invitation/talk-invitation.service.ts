@@ -44,13 +44,14 @@ export class TalkInvitationService {
         },
       });
     } else {
-      await this.prismaService.talk.create({
+      const talk = await this.prismaService.talk.create({
         data: {
           users: {
             connect: [{ id: inviteeId }, { id: invitation.inviterId }],
           },
         },
       });
+      invitation.talkId = talk.id;
     }
 
     return await this.prismaService.talkInvitation.update({
