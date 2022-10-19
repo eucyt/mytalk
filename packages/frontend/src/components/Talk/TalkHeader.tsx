@@ -1,8 +1,6 @@
 /* eslint-disable */
 import React from "react";
 
-import InviteButton from "@/components/Talk/InviteButton";
-
 interface Props {
   talkId: number;
 }
@@ -28,9 +26,6 @@ const TalkHeader: React.VFC<Props> = (props) => (
           </div>
           <span className="text-lg text-gray-600">Junior Developer</span>
         </div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <InviteButton talkId={props.talkId} />
       </div>
     </div>
   </>
