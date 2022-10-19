@@ -32,7 +32,9 @@ const AuthLayoutWithHeaderFooter: React.VFC<Props> = (props) => {
       <AuthLayout setUser={props.setUser} title={props.title}>
         <div className="min-h-screen bg-gray-100">
           <Navigation user={props.user} setLoading={setLoading} />
-          <main>{props.children}</main>
+          <main className="flex h-[calc(100vh-64px)] flex-col items-center bg-gray-100 p-2 sm:p-12">
+            {props.children}
+          </main>
         </div>
       </AuthLayout>
     );

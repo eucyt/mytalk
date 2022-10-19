@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import Content from "@/components/Common/Content";
 import AuthLayoutWithHeaderFooter from "@/components/Common/Layouts/AuthLayoutWithHeaderFooter";
 import TalkList from "@/components/Talk/TalkList";
 import talkAPI from "@/lib/api/talk";
@@ -27,11 +28,9 @@ const Index = () => {
       user={user}
       title="MyTalk - Talk"
     >
-      <div className="flex h-[calc(100vh-64px)] flex-col items-center bg-gray-100 p-2 sm:p-12">
-        <div className="h-full w-full bg-white px-6 py-4 sm:max-w-lg sm:rounded-lg sm:shadow-md md:max-w-xl lg:max-w-2xl">
-          <TalkList talks={talks} username={user?.displayName} />
-        </div>
-      </div>
+      <Content>
+        <TalkList talks={talks} username={user?.displayName} />
+      </Content>
     </AuthLayoutWithHeaderFooter>
   );
 };
