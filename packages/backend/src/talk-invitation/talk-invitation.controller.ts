@@ -43,6 +43,10 @@ export class TalkInvitationController {
     );
   }
 
+  /*
+    join invited talk as a member
+    If the invited talk does not exist, create talk and join the talk together with inviter.
+ */
   @Get(':invitationId/accept')
   @UseGuards(JwtAuthGuard)
   async acceptInvitation(

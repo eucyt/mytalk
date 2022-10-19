@@ -6,14 +6,13 @@ const SERVER_BASE_URL = process.env.SERVER_BASE_URL ?? "http://localhost:3000";
 const headers = { "Content-Type": "application/json" };
 
 const talkInvitationAPI = {
-  invite: async (
+  inviteToTalkNotCreated: async (
     accessToken: string,
-    inviteeEmail: string,
-    talkId: number
+    inviteeEmail: string
   ): AxiosPromise => {
     return (await axios
       .post(
-        `${SERVER_BASE_URL}/talks/${talkId}/invite`,
+        `${SERVER_BASE_URL}/talk-invitation`,
         { inviteeEmail: inviteeEmail },
         {
           headers: {

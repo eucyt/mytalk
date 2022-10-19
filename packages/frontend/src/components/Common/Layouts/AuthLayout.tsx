@@ -49,7 +49,8 @@ const AuthLayout: React.VFC<Props> = (props) => {
       window.localStorage.removeItem("refreshToken");
       await router.push(GUEST_REDIRECT_URL);
     })();
-  }, [props, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   return (
     <>

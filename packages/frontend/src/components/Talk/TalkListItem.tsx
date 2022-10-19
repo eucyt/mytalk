@@ -7,7 +7,7 @@ interface Props {
 const TaskListItem: React.VFC<Props> = (props) => (
   <a
     href={"/talks/" + props.id.toString()}
-    className="transition duration-150 hover:opacity-50"
+    className="transition duration-150 ease-in-out hover:opacity-50"
   >
     <div className="relative flex flex-row items-center p-4">
       {/*<div className="absolute right-0 top-0 mr-4 mt-3 text-xs text-gray-500">*/}

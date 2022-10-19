@@ -17,6 +17,10 @@ export class TalkInvitationService {
     });
   }
 
+  /*
+    join invited talk as a member
+    If the invited talk does not exist, create talk and join the talk together with inviter.
+   */
   async accept(invitationId: number, inviteeId: number) {
     const invitation = await this.prismaService.talkInvitation.findUnique({
       where: { id: invitationId },

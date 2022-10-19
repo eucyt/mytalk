@@ -18,7 +18,7 @@ const TalkList: React.FC<Props> = (props) => {
         {/*  5*/}
         {/*</div>*/}
       </div>
-      <div className="relative h-full overflow-hidden pt-2 ">
+      <div className="relative h-full overflow-hidden pt-2">
         <div className="-mx-4 flex h-full flex-col divide-y overflow-y-auto">
           {props.talks?.map((talk, i) => {
             return (
