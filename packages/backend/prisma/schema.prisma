@@ -31,8 +31,8 @@ model Talk {
 
 model TalkInvitation {
     id              Int                 @id @default(autoincrement())
-    talk            Talk                @relation(fields: [talkId], references: [id])
-    talkId          Int
+    talk            Talk?               @relation(fields: [talkId], references: [id])
+    talkId          Int?
     inviter         User                @relation(name: "InvitingTalk", fields: [inviterId], references: [id])
     inviterId       Int
     invitee         User                @relation(name: "InvitedTalk", fields: [inviteeId], references: [id])

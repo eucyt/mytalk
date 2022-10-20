@@ -1,10 +1,19 @@
-import { Controller, Get, Param, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  UseGuards,
+  Req,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreateTalkInvitationRequest } from './talk-invitation.entity';
 import { TalkInvitationService } from './talk-invitation.service';
 
-@Controller('talk-invitation')
+@Controller('talk-invitations')
 export class TalkInvitationController {
   constructor(private readonly talkInvitationService: TalkInvitationService) {}
 
@@ -22,7 +31,23 @@ export class TalkInvitationController {
     };
   }
 
-  @Get(':invitationId/accept')
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  async create(
+    @Req() req: { user: User },
+    @Body() createTalkInvitationRequest: CreateTalkInvitationRequest,
+  ) {
+    await this.talkInvitationService.create(
+      req.user.id,
+      createTalkInvitationRequest.inviteeEmail,
+    );
+  }
+
+  /*
+    join invited talk as a member
+    If the invited talk does not exist, create talk and join the talk together with inviter.
+ */
+  @Post(':invitationId/accept')
   @UseGuards(JwtAuthGuard)
   async acceptInvitation(
     @Req() req: { user: User },

@@ -23,15 +23,16 @@ export class TalkService {
       where: {
         users: { some: { id: userId } },
       },
+      include: { users: true },
     });
   }
 
-  async invite(talkId: number, inviterId: number, inviteeEmail: string) {
+  async inviteToTalk(talkId: number, inviterId: number, inviteeEmail: string) {
     const talk = await this.prismaService.talk.findUnique({
       where: { id: talkId },
       include: { users: true },
     });
-    if (!talk || !(inviterId in talk.users.map((item) => item.id))) {
+    if (!talk || !talk.users.map((item) => item.id).includes(inviterId)) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 

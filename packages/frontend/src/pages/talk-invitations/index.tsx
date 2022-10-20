@@ -2,34 +2,35 @@ import React, { useEffect, useState } from "react";
 
 import Content from "@/components/Common/Content";
 import AuthLayoutWithHeaderFooter from "@/components/Common/Layouts/AuthLayoutWithHeaderFooter";
-import TalkList from "@/components/Talk/TalkList";
-import talkAPI from "@/lib/api/talk";
-import { Talk } from "@/lib/type/talkType";
+import TalkInvitationList from "@/components/TalkInvitation/TalkInvitationList";
+import talkInvitationAPI from "@/lib/api/talkInvitation";
+import { TaskInvitation } from "@/lib/type/taskInvitationType";
 import { User } from "@/lib/type/userType";
 
-const Index = () => {
-  const [talks, setTalks] = useState<Talk[]>();
+const Index: React.FC = () => {
   const [user, setUser] = useState<User>();
+  const [invitations, setInvitations] = useState<TaskInvitation[]>();
+  const { getInvitedInvitations } = talkInvitationAPI;
 
   useEffect(() => {
     void (async () => {
-      const { data, status } = await talkAPI.getTalks(
+      const { status, data } = await getInvitedInvitations(
         window.localStorage.getItem("accessToken")!
       );
       if (status === 200) {
-        setTalks(data.talks);
+        setInvitations(data.invitations);
       }
     })();
-  }, []);
+  }, [getInvitedInvitations]);
 
   return (
     <AuthLayoutWithHeaderFooter
       setUser={setUser}
       user={user}
-      title="MyTalk - Talk"
+      title="MyTalk - Invitations"
     >
       <Content>
-        <TalkList talks={talks} username={user?.displayName} />
+        <TalkInvitationList invitations={invitations} />
       </Content>
     </AuthLayoutWithHeaderFooter>
   );

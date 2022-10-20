@@ -43,7 +43,7 @@ export class AuthService {
         sub: user.id,
       },
       {
-        expiresIn: '15m',
+        expiresIn: '1h',
       },
     );
 
