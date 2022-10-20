@@ -11,7 +11,7 @@ const Index = () => {
   const { id } = router.query;
 
   return (
-    <AuthLayout>
+    <AuthLayout title="MyTalk - Message">
       <div className="flex h-screen flex-1 flex-col justify-between sm:p-6">
         <TalkHeader talkId={Number(id)} />
         <MessageList />
