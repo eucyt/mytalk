@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosPromise, AxiosResponse } from "axios";
 
-const SERVER_BASE_URL = process.env.SERVER_BASE_URL ?? "http://localhost:3000";
+const SERVER_BASE_URL =
+  process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? "http://localhost:3000";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const headers = { "Content-Type": "application/json" };
