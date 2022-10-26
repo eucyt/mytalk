@@ -55,7 +55,7 @@ const Register: React.VFC = () => {
     return <FullSizeLoading />;
   } else {
     return (
-      <GuestLayout>
+      <GuestLayout title={"MyTalk - Register"}>
         <AuthCard logo={<ApplicationLogo />}>
           <AuthValidationErrors className="mb-4" errors={errors} />
 

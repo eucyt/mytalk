@@ -1,4 +1,3 @@
-import Head from "next/head";
 import React from "react";
 
 import ApplicationLogo from "@/components/Common/ApplicationLogo";
@@ -6,10 +5,7 @@ import GuestLayout from "@/components/Common/Layouts/GuestLayout";
 
 const Index = () => {
   return (
-    <GuestLayout>
-      <Head>
-        <title>MyTalk - Home</title>
-      </Head>
+    <GuestLayout title={"MyTalk - Home"}>
       <div className="flex h-screen w-screen items-center justify-center">
         <div>
           <ApplicationLogo className="mx-auto" />

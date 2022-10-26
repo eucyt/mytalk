@@ -50,7 +50,7 @@ const Login: React.VFC = () => {
     return <FullSizeLoading />;
   } else {
     return (
-      <GuestLayout>
+      <GuestLayout title={"MyTalk - Login"}>
         <AuthCard
           logo={
             <a>
