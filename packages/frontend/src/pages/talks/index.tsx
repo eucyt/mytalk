@@ -4,11 +4,11 @@ import Content from "@/components/Common/Content";
 import AuthLayoutWithHeaderFooter from "@/components/Common/Layouts/AuthLayoutWithHeaderFooter";
 import TalkList from "@/components/Talk/TalkList";
 import talkAPI from "@/lib/api/talk";
-import { Talk } from "@/lib/type/talkType";
+import { TalkListItem } from "@/lib/type/talkType";
 import { User } from "@/lib/type/userType";
 
 const Index = () => {
-  const [talks, setTalks] = useState<Talk[]>();
+  const [talks, setTalks] = useState<TalkListItem[]>();
   const [user, setUser] = useState<User>();
 
   useEffect(() => {

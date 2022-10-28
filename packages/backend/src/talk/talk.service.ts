@@ -30,6 +30,13 @@ export class TalkService {
     });
   }
 
+  async findOne(talkId: number) {
+    return await this.prismaService.talk.findUnique({
+      where: { id: talkId },
+      include: { users: true, messages: { include: { sender: true } } },
+    });
+  }
+
   async createMessage(content: string, user: User, talkId: number) {
     const message = await this.prismaService.message.create({
       data: {

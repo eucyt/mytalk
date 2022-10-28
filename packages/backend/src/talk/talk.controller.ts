@@ -47,20 +47,27 @@ export class TalkController {
     };
   }
 
-  // TODO:
-  // @Get(':id')
-  // @UseGuards(JwtAuthGuard)
-  // async findOne(@Param('id') talkId: string, @Req() req: { user: User }) {
-  //   const talks = await this.talkService.findAll(req.user.id);
-  //   return {
-  //     talks: talks.map((talk) => ({
-  //       id: talk.id,
-  //       users: talk.users.map((user) => ({
-  //         name: user.displayName,
-  //       })),
-  //     })),
-  //   };
-  // }
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  async findOne(@Param('id') talkId: string, @Req() req: { user: User }) {
+    if (
+      !(await this.talkService.isCorrectTalkMember(req.user.id, Number(talkId)))
+    ) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const talk = (await this.talkService.findOne(req.user.id))!;
+    return {
+      messages: talk.messages.map((message) => ({
+        senderName: message.sender.displayName,
+        content: message.content,
+      })),
+      users: talk.users.map((user) => ({
+        name: user.displayName,
+      })),
+    };
+  }
 
   @Post(':id/message')
   @UseGuards(JwtAuthGuard)

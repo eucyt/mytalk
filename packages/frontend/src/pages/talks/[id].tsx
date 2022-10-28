@@ -4,13 +4,17 @@ import { io } from "socket.io-client";
 
 import AuthLayout from "@/components/Common/Layouts/AuthLayout";
 import talkAPI from "@/lib/api/talk";
+import { Talk } from "@/lib/type/talkType";
 
 const Index = () => {
   const router = useRouter();
   const { id: talkId } = router.query;
-  const { postMessage } = talkAPI;
+  const { postMessage, getMessages } = talkAPI;
+
+  // TODO: many connect happened
   const socket = io("http://localhost:3000");
   const [message, setMessage] = useState<string>();
+  const [messages, setMessages] = useState<Talk>();
 
   const sendMessage = useCallback(
     async (event: { preventDefault: () => void }) => {
@@ -40,6 +44,22 @@ const Index = () => {
     });
   }, [socket, talkId]);
 
+  useEffect(() => {
+    if (typeof talkId != "string") {
+      return;
+    }
+
+    void (async () => {
+      const { status, data } = await getMessages(
+        window.localStorage.getItem("accessToken")!,
+        talkId
+      );
+      if (status === 200) {
+        setMessages(data);
+      }
+    })();
+  });
+
   return (
     <AuthLayout title="MyTalk - Message">
       <div className="flex h-screen flex-1 flex-col justify-between sm:p-6">
@@ -47,6 +67,12 @@ const Index = () => {
         {/*<TalkHeader talkId={Number(id)} />*/}
         {/*<MessageList />*/}
         {/*<SendingMessageArea />*/}
+        <div>
+          {messages?.messages.map((message) => (
+            <div>{message.content}</div>
+          ))}
+        </div>
+
         <form onSubmit={sendMessage}>
           <input
             type="text"
