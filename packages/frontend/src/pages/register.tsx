@@ -59,7 +59,6 @@ const Register: React.VFC = () => {
         <AuthCard logo={<ApplicationLogo />}>
           <AuthValidationErrors className="mb-4" errors={errors} />
 
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
           <form onSubmit={submitForm}>
             <div>
               <Label htmlFor="name">Name</Label>
