@@ -70,7 +70,7 @@ export class TalkController {
     @Req() req: { user: User },
   ) {
     if (
-      !(await this.talkService.isCorrectTalkMember(Number(talkId), req.user.id))
+      !(await this.talkService.isCorrectTalkMember(req.user.id, Number(talkId)))
     ) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
@@ -89,7 +89,7 @@ export class TalkController {
     @Body() createTalkInvitationRequest: InviteToTalkRequest,
   ) {
     if (
-      !(await this.talkService.isCorrectTalkMember(Number(talkId), req.user.id))
+      !(await this.talkService.isCorrectTalkMember(req.user.id, Number(talkId)))
     ) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
