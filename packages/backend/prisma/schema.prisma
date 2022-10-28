@@ -19,6 +19,7 @@ model User {
     talks           Talk[]
     invitingTalk    TalkInvitation[]    @relation("InvitingTalk")
     invitedTalk     TalkInvitation[]    @relation("InvitedTalk")
+    messages        Message[]
     createdAt       DateTime            @default(now())
     updatedAt       DateTime            @updatedAt
 }
@@ -26,6 +27,7 @@ model User {
 model Talk {
     id              Int                 @id @default(autoincrement())
     users           User[]
+    messages        Message[]
     talkInvitations TalkInvitation[]
 }
 
@@ -40,4 +42,15 @@ model TalkInvitation {
     invitedAt       DateTime            @default(now())
     acceptedAt      DateTime?
     @@unique([talkId, inviterId, inviteeId])
+}
+
+model Message {
+    id              Int                 @id @default(autoincrement())
+    sender          User                @relation(fields: [senderId], references: [id])
+    senderId        Int
+    talk            Talk                @relation(fields: [talkId], references: [id])
+    talkId          Int
+    content         String              @db.Text
+    createdAt       DateTime            @default(now())
+    updatedAt       DateTime            @updatedAt
 }
