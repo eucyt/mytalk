@@ -6,11 +6,17 @@ import {
   UseGuards,
   Req,
   Param,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { InviteToTalkRequest, CreateTalkRequest } from './talk.entity';
+import {
+  InviteToTalkRequest,
+  CreateTalkRequest,
+  CreateMessageRequest,
+} from './talk.entity';
 import { TalkService } from './talk.service';
 
 @Controller('talks')
@@ -41,6 +47,40 @@ export class TalkController {
     };
   }
 
+  // TODO:
+  // @Get(':id')
+  // @UseGuards(JwtAuthGuard)
+  // async findOne(@Param('id') talkId: string, @Req() req: { user: User }) {
+  //   const talks = await this.talkService.findAll(req.user.id);
+  //   return {
+  //     talks: talks.map((talk) => ({
+  //       id: talk.id,
+  //       users: talk.users.map((user) => ({
+  //         name: user.displayName,
+  //       })),
+  //     })),
+  //   };
+  // }
+
+  @Post(':id/message')
+  @UseGuards(JwtAuthGuard)
+  async createMessage(
+    @Param('id') talkId: string,
+    @Body() createMessageRequest: CreateMessageRequest,
+    @Req() req: { user: User },
+  ) {
+    if (
+      !(await this.talkService.isCorrectTalkMember(Number(talkId), req.user.id))
+    ) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+    await this.talkService.createMessage(
+      createMessageRequest.message,
+      req.user,
+      Number(talkId),
+    );
+  }
+
   @Post(':id/invite')
   @UseGuards(JwtAuthGuard)
   async invite(
@@ -48,6 +88,11 @@ export class TalkController {
     @Req() req: { user: User },
     @Body() createTalkInvitationRequest: InviteToTalkRequest,
   ) {
+    if (
+      !(await this.talkService.isCorrectTalkMember(Number(talkId), req.user.id))
+    ) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
     await this.talkService.inviteToTalk(
       Number(talkId),
       req.user.id,
