@@ -9,10 +9,10 @@ import { Talk } from "@/lib/type/talkType";
 const Index = () => {
   const router = useRouter();
   const { id: talkId } = router.query;
+  const socket = io("http://localhost:3000");
+  const [, setIsConnected] = useState(socket.connected);
   const { postMessage, getMessages } = talkAPI;
 
-  // TODO: many connect happened
-  const socket = io("http://localhost:3000");
   const [message, setMessage] = useState<string>();
   const [messages, setMessages] = useState<Talk>();
 
@@ -20,6 +20,7 @@ const Index = () => {
     async (event: { preventDefault: () => void }) => {
       event.preventDefault();
       if (typeof talkId == "string" && message) {
+        // TODO: 二通目がリロードしないとここから通らない
         const { status } = await postMessage(
           window.localStorage.getItem("accessToken")!,
           talkId,
@@ -38,11 +39,24 @@ const Index = () => {
     socket.on("connect", () => {
       console.log("socket connected");
       socket.emit("join", talkId);
+      setIsConnected(true);
     });
+
+    socket.on("disconnect", () => {
+      setIsConnected(false);
+    });
+
     socket.on("newMessage", (message) => {
       console.log(message);
     });
-  }, [socket, talkId]);
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("newMessage");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (typeof talkId != "string") {
