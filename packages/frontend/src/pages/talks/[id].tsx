@@ -39,7 +39,11 @@ const Index = () => {
     if (!talkId) {
       return;
     }
-    const socket = io("http://localhost:3000");
+    const socket = io("http://localhost:3000", {
+      auth: (callback) => {
+        callback({ access_token: window.localStorage.getItem("accessToken")! });
+      },
+    });
     socket.on("connect", () => {
       console.log("socket connected");
       socket.emit("join", talkId);

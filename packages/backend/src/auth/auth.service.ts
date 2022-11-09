@@ -79,4 +79,13 @@ export class AuthService {
   async withdraw(user: User) {
     return !(await this.userService.delete(user.id));
   }
+
+  async findUserByJwt(token: string) {
+    try {
+      const payload = this.jwtService.verify<{ sub: string }>(token);
+      return await this.userService.find(Number(payload.sub));
+    } catch (e) {
+      throw new BadRequestException('Invalid access token');
+    }
+  }
 }
