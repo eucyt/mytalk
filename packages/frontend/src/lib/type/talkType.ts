@@ -3,11 +3,11 @@ export interface TalkListItem {
   users: UserInTalk[];
 }
 
-interface UserInTalk {
+export interface UserInTalk {
   name: string;
 }
 
-interface Message {
+export interface Message {
   senderName: string;
   content: string;
 }
