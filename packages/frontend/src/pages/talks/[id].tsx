@@ -40,9 +40,7 @@ const Index = () => {
       return;
     }
     const socket = io("http://localhost:3000", {
-      auth: (callback) => {
-        callback({ access_token: window.localStorage.getItem("accessToken")! });
-      },
+      auth: { access_token: window.localStorage.getItem("accessToken")! },
     });
     socket.on("connect", () => {
       console.log("socket connected");
