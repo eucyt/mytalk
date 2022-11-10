@@ -29,7 +29,7 @@ const TalkList: React.FC<Props> = (props) => {
               <TaskListItem
                 id={talk.id}
                 talkMemberNames={talk.users
-                  .map((user) => user.name)
+                  .map((user) => user.displayName)
                   .filter((v) => v !== props.username)}
               />
             );

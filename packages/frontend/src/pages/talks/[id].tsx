@@ -1,39 +1,28 @@
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
+import FullSizeLoading from "@/components/Common/FullSizeLoading";
 import AuthLayout from "@/components/Common/Layouts/AuthLayout";
+import MessageList from "@/components/Talk/MessegeList";
+import SendingMessageArea from "@/components/Talk/SendingMessageArea";
+import TalkHeader from "@/components/Talk/TalkHeader";
 import talkAPI from "@/lib/api/talk";
-import { Message, UserInTalk } from "@/lib/type/talkType";
+import { Message } from "@/lib/type/talkType";
+import { Me, User } from "@/lib/type/userType";
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const Index = () => {
   const router = useRouter();
   const { id: talkId } = router.query;
 
-  const [, setIsConnected] = useState(false);
-  const { postMessage, getMessages } = talkAPI;
+  const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { getMessages } = talkAPI;
 
-  const [message, setMessage] = useState<string>();
   const [messages, setMessages] = useState<Message[]>();
-  const [, setMembers] = useState<UserInTalk[]>();
-
-  const sendMessage = useCallback(
-    async (event: { preventDefault: () => void }) => {
-      event.preventDefault();
-      if (typeof talkId == "string" && message) {
-        const { status } = await postMessage(
-          window.localStorage.getItem("accessToken")!,
-          talkId,
-          message
-        );
-        console.log(status);
-        if (status === 201) {
-          setMessage(undefined);
-        }
-      }
-    },
-    [message, postMessage, talkId]
-  );
+  const [members, setMembers] = useState<User[]>();
+  const [user, setUser] = useState<Me>();
 
   useEffect(() => {
     if (!talkId) {
@@ -87,28 +76,27 @@ const Index = () => {
     })();
   }, [getMessages, talkId]);
 
-  return (
-    <AuthLayout title="MyTalk - Message">
-      <div className="flex h-screen flex-1 flex-col justify-between sm:p-6">
-        <p>Coming Soon...</p>
-        {/*<TalkHeader talkId={Number(id)} />*/}
-        {/*<MessageList />*/}
-        {/*<SendingMessageArea />*/}
-        <div>
-          {messages?.map((message) => (
-            <div>{message.content}</div>
-          ))}
-        </div>
+  useEffect(() => {
+    if (isConnected && messages !== undefined) {
+      setIsLoading(false);
+    }
+  }, [isConnected, messages]);
 
-        <form onSubmit={sendMessage}>
-          <input
-            type="text"
-            onChange={(event) => {
-              setMessage(event.target.value);
-            }}
-          />
-          <button type="submit">submit</button>
-        </form>
+  return isLoading ? (
+    <FullSizeLoading />
+  ) : (
+    <AuthLayout title="MyTalk - Message" setUser={setUser}>
+      <div className="flex h-screen flex-1 flex-col justify-between sm:p-6">
+        {/* HACK: Removing my name from member's names */}
+        <TalkHeader
+          talkMemberNamesWithoutMe={
+            members
+              ?.map((member) => member.displayName)
+              .filter((v) => v !== user?.displayName) ?? []
+          }
+        />
+        <MessageList messages={messages ?? []} myId={user?.id} />
+        <SendingMessageArea talkId={talkId as string} />
       </div>
     </AuthLayout>
   );
