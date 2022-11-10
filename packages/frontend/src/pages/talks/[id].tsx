@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
+import FullSizeLoading from "@/components/Common/FullSizeLoading";
 import AuthLayout from "@/components/Common/Layouts/AuthLayout";
 import MessageList from "@/components/Talk/MessegeList";
 import SendingMessageArea from "@/components/Talk/SendingMessageArea";
@@ -17,7 +18,7 @@ const Index = () => {
   const { id: talkId } = router.query;
 
   const [isConnected, setIsConnected] = useState(false);
-  const [, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { getMessages } = talkAPI;
 
   const [messages, setMessages] = useState<Message[]>();
@@ -28,9 +29,12 @@ const Index = () => {
     if (!talkId) {
       return;
     }
-    const socket = io("http://localhost:3000", {
-      auth: { access_token: window.localStorage.getItem("accessToken")! },
-    });
+    const socket = io(
+      process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? "http://localhost:3000",
+      {
+        auth: { access_token: window.localStorage.getItem("accessToken")! },
+      }
+    );
     socket.on("connect", () => {
       console.log("socket connected");
       socket.emit("join", talkId);
@@ -84,7 +88,9 @@ const Index = () => {
     }
   }, [isConnected, messages]);
 
-  return (
+  return isLoading ? (
+    <FullSizeLoading />
+  ) : (
     <AuthLayout title="MyTalk - Message" setUser={setUser}>
       <div className="flex h-screen flex-1 flex-col justify-between p-2 sm:p-6">
         <TalkHeader
