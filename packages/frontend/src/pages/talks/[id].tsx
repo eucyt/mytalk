@@ -90,12 +90,10 @@ const Index = () => {
   ) : (
     <AuthLayout title="MyTalk - Message" setUser={setUser}>
       <div className="flex h-screen flex-1 flex-col justify-between p-2 sm:p-6">
-        {/* HACK: Removing my name from member's names */}
         <TalkHeader
           talkMemberNamesWithoutMe={
-            members
-              ?.map((member) => member.displayName)
-              .filter((v) => v !== user?.displayName) ?? []
+            members?.map((member) => member).filter((v) => v.id !== user?.id) ??
+            []
           }
         />
         <MessageList messages={messages ?? []} myId={user?.id} />

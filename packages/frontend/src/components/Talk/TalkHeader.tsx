@@ -1,8 +1,9 @@
 /* eslint-disable */
 import React from "react";
+import { User } from "@/lib/type/userType";
 
 interface Props {
-  talkMemberNamesWithoutMe: string[];
+  talkMemberNamesWithoutMe: User[];
 }
 const TalkHeader: React.VFC<Props> = (props) => (
   <>
@@ -28,14 +29,16 @@ const TalkHeader: React.VFC<Props> = (props) => (
       </a>
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-500 text-pink-100">
         {props.talkMemberNamesWithoutMe.length !== 0
-          ? props.talkMemberNamesWithoutMe[0][0]
+          ? props.talkMemberNamesWithoutMe[0].displayName[0]
           : ""}
       </div>
 
       <div className="ml-3 flex flex-col">
         <div className="text-sm font-semibold">
           {props.talkMemberNamesWithoutMe.length !== 0
-            ? props.talkMemberNamesWithoutMe.join(", ")
+            ? props.talkMemberNamesWithoutMe
+                .map((member) => member.displayName)
+                .join(", ")
             : "No Member"}
         </div>
       </div>

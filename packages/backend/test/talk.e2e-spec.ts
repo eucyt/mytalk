@@ -84,8 +84,8 @@ describe('TalkController (e2e)', () => {
       content: 'test message2',
     });
     expect(res.body.users).toEqual([
-      { displayName: 'Alice' },
-      { displayName: 'Bob' },
+      { id: 1, displayName: 'Alice' },
+      { id: 2, displayName: 'Bob' },
     ]);
   });
 
