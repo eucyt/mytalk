@@ -20,6 +20,42 @@ const talkAPI = {
         return error.response;
       })) as AxiosResponse;
   },
+
+  getMessages: async (accessToken: string, talkId: string): AxiosPromise => {
+    return (await axios
+      .get(`${SERVER_BASE_URL}/talks/${talkId}`, {
+        headers: {
+          ...headers,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch((error: AxiosError) => {
+        return error.response;
+      })) as AxiosResponse;
+  },
+
+  postMessage: async (
+    accessToken: string,
+    talkId: string,
+    message: string
+  ): AxiosPromise => {
+    return (await axios
+      .post(
+        `${SERVER_BASE_URL}/talks/${talkId}/message`,
+        { message },
+        {
+          headers: {
+            ...headers,
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .catch((error: AxiosError) => {
+        return error.response;
+      })) as AxiosResponse;
+  },
 };
 
 export default talkAPI;

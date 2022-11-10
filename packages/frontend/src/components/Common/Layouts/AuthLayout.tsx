@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 import userAPI from "@/lib/api/user";
-import { User } from "@/lib/type/userType";
+import { Me } from "@/lib/type/userType";
 import { GUEST_REDIRECT_URL } from "@/lib/utils/constant";
 
 interface Props {
   children?: React.ReactNode;
-  setUser?: React.Dispatch<React.SetStateAction<User | undefined>>;
+  setUser?: React.Dispatch<React.SetStateAction<Me | undefined>>;
   title: string;
 }
 

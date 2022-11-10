@@ -7,11 +7,11 @@ import Dropdown from "@/components/Common/Header/Auth/Dropdown";
 import { DropdownButton } from "@/components/Common/Header/Auth/DropdownLink";
 import NavLink from "@/components/Common/Header/Auth/NavLink";
 import { ResponsiveNavButton } from "@/components/Common/Header/Auth/ResponsiveNavLink";
-import { User } from "@/lib/type/userType";
+import { Me } from "@/lib/type/userType";
 import { GUEST_REDIRECT_URL } from "@/lib/utils/constant";
 
 interface Props {
-  user?: User;
+  user?: Me;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

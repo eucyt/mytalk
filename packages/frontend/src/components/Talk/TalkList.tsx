@@ -4,10 +4,10 @@ import Item from "@/components/Common/Item";
 import List from "@/components/Common/List";
 import CreateTalkButton from "@/components/Talk/CreateTalkButton";
 import TaskListItem from "@/components/Talk/TalkListItem";
-import { Talk } from "@/lib/type/talkType";
+import { TalkListItem } from "@/lib/type/talkType";
 
 interface Props {
-  talks?: Talk[];
+  talks?: TalkListItem[];
   username?: string;
 }
 const TalkList: React.FC<Props> = (props) => {
@@ -29,7 +29,7 @@ const TalkList: React.FC<Props> = (props) => {
               <TaskListItem
                 id={talk.id}
                 talkMemberNames={talk.users
-                  .map((user) => user.name)
+                  .map((user) => user.displayName)
                   .filter((v) => v !== props.username)}
               />
             );

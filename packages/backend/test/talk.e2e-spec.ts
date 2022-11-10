@@ -57,7 +57,7 @@ describe('TalkController (e2e)', () => {
     expect(res.status).toEqual(200);
 
     expect(res.body.talks.length).toEqual(3);
-    expect(res.body.talks[0].users).toEqual([{ name: 'Alice' }]);
+    expect(res.body.talks[0].users).toEqual([{ displayName: 'Alice' }]);
   });
 
   it('OK /talks (POST)', async () => {
@@ -68,6 +68,71 @@ describe('TalkController (e2e)', () => {
     expect(res.status).toEqual(201);
 
     expect(res.body).toHaveProperty('id');
+  });
+
+  it('OK /talks/:id (GET)', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talks/2')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken);
+    expect(res.status).toEqual(200);
+
+    expect(res.body.messages.length).toEqual(3);
+    expect(res.body.messages[0]).toEqual({
+      senderId: 1,
+      senderName: 'Alice',
+      content: 'test message2',
+    });
+    expect(res.body.users).toEqual([
+      { id: 1, displayName: 'Alice' },
+      { id: 2, displayName: 'Bob' },
+    ]);
+  });
+
+  it('NG /talks/:id (GET): The user is not a member in talk.', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talks/1')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken);
+    expect(res.status).toEqual(404);
+  });
+
+  it('NG /talks/:id (GET): The talk does NOT exist.', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/talks/999')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken);
+    expect(res.status).toEqual(404);
+  });
+
+  it('OK /talks/:id/message (POST)', async () => {
+    const testMessage = 'test creating message';
+    const res = await request(app.getHttpServer())
+      .post('/talks/1/message')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({ message: testMessage });
+    expect(res.status).toEqual(201);
+  });
+
+  it('NG /talks/:id/message (POST): The user is not a member in talk.', async () => {
+    const testMessage = 'test creating message';
+    const res = await request(app.getHttpServer())
+      .post('/talks/1/message')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + bobAccessToken)
+      .send({ message: testMessage });
+    expect(res.status).toEqual(404);
+  });
+
+  it('NG /talks/:id/message (POST): The talk does NOT exist.', async () => {
+    const testMessage = 'test creating message';
+    const res = await request(app.getHttpServer())
+      .post('/talks/999/message')
+      .set('Accept', 'application/json')
+      .set('Authorization', 'bearer ' + aliceAccessToken)
+      .send({ message: testMessage });
+    expect(res.status).toEqual(404);
   });
 
   it('OK /talks/:id/invite (POST)', async () => {

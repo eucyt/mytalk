@@ -1,32 +1,76 @@
 /* eslint-disable */
 import React from "react";
+import { User } from "@/lib/type/userType";
 
 interface Props {
-  talkId: number;
+  talkMemberNamesWithoutMe: User[];
 }
 const TalkHeader: React.VFC<Props> = (props) => (
   <>
-    <div className="flex justify-between border-b-2 border-gray-200 py-3 sm:items-center">
-      <div className="relative flex items-center space-x-4">
-        <div className="relative">
-          <span className="absolute right-0 bottom-0 text-green-500">
-            <svg width="20" height="20">
-              <circle cx="8" cy="8" r="8" fill="currentColor"></circle>
-            </svg>
-          </span>
-          <img
-            src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-            alt=""
-            className="h-10 w-10 rounded-full sm:h-16 sm:w-16"
-          />
-        </div>
-        <div className="flex flex-col leading-tight">
-          <div className="mt-1 flex items-center text-2xl">
-            <span className="mr-3 text-gray-700">Anderson Vanhron</span>
-          </div>
-          <span className="text-lg text-gray-600">Junior Developer</span>
+    <div className="flex flex-row items-center rounded-2xl py-4 sm:px-6 px-3 shadow">
+      <a
+        href="/talks"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 mr-3"
+      >
+        <span>
+          <svg
+            className="h-5 w-5"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            stroke="#000"
+            fill="none"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polyline points="14 18 8 12 14 6 14 6" />
+          </svg>
+        </span>
+      </a>
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-500 text-pink-100">
+        {props.talkMemberNamesWithoutMe.length !== 0
+          ? props.talkMemberNamesWithoutMe[0].displayName[0]
+          : ""}
+      </div>
+
+      <div className="ml-3 flex flex-col">
+        <div className="text-sm font-semibold">
+          {props.talkMemberNamesWithoutMe.length !== 0
+            ? props.talkMemberNamesWithoutMe
+                .map((member) => member.displayName)
+                .join(", ")
+            : "No Member"}
         </div>
       </div>
+
+      {/* TODO: talk setting */}
+      {/*<div className="ml-auto">*/}
+      {/*  <ul className="flex flex-row items-center space-x-2">*/}
+      {/*    <li>*/}
+      {/*      <a*/}
+      {/*        href="#"*/}
+      {/*        className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200"*/}
+      {/*      >*/}
+      {/*        <span>*/}
+      {/*          <svg*/}
+      {/*            className="h-5 w-5"*/}
+      {/*            fill="none"*/}
+      {/*            stroke="currentColor"*/}
+      {/*            viewBox="0 0 24 24"*/}
+      {/*            xmlns="http://www.w3.org/2000/svg"*/}
+      {/*          >*/}
+      {/*            <path*/}
+      {/*              strokeLinecap="round"*/}
+      {/*              strokeLinejoin="round"*/}
+      {/*              strokeWidth="2"*/}
+      {/*              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"*/}
+      {/*            ></path>*/}
+      {/*          </svg>*/}
+      {/*        </span>*/}
+      {/*      </a>*/}
+      {/*    </li>*/}
+      {/*  </ul>*/}
+      {/*</div>*/}
     </div>
   </>
 );

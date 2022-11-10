@@ -1,8 +1,12 @@
-export interface Talk {
+import { User } from "@/lib/type/userType";
+
+export interface TalkListItem {
   id: number;
-  users: UserInTalk[];
+  users: User[];
 }
 
-interface UserInTalk {
-  name: string;
+export interface Message {
+  senderId: number;
+  senderName: string;
+  content: string;
 }
