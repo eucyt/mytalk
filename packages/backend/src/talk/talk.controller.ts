@@ -57,7 +57,7 @@ export class TalkController {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const talk = (await this.talkService.findOne(req.user.id))!;
+    const talk = (await this.talkService.findOne(Number(talkId)))!;
     return {
       messages: talk.messages.map((message) => ({
         senderName: message.sender.displayName,
