@@ -57,6 +57,37 @@ async function main() {
   });
 
   console.log(talkInvitation);
+
+  const messageInTalkAlice = await prisma.message.create({
+    data: {
+      talkId: talkAlice.id,
+      senderId: alice.id,
+      content: 'test message1',
+    },
+  });
+
+  const messageInTalkAliceBob = await prisma.message.createMany({
+    data: [
+      {
+        talkId: talkAliceBob.id,
+        senderId: alice.id,
+        content: 'test message2',
+      },
+      {
+        talkId: talkAliceBob.id,
+        senderId: alice.id,
+        content: 'test message3',
+      },
+      {
+        talkId: talkAliceBob.id,
+        senderId: bob.id,
+        content: 'test message4',
+      },
+    ],
+  });
+
+  console.log(messageInTalkAlice);
+  console.log(messageInTalkAliceBob);
 }
 
 main()
