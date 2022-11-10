@@ -13,6 +13,7 @@ import { resetDatabase } from './detabese-reset';
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
   const alice = {
+    id: 1,
     email: 'test.alice@test.com',
     displayName: 'Alice',
     password: 'Password!0Alice',
@@ -205,6 +206,8 @@ describe('AuthController (e2e)', () => {
       .set('Authorization', 'bearer ' + loginRes.body.accessToken);
 
     expect(res.status).toEqual(200);
+
+    expect(res.body.user.id).toEqual(alice.id);
 
     expect(res.body.user.displayName).toEqual(alice.displayName);
 

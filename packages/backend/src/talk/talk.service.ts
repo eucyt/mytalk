@@ -51,6 +51,7 @@ export class TalkService {
 
     // TODO: emit message crated_at
     this.talkGateway.server.to(String(talkId)).emit('newMessage', {
+      senderId: message.sender.id,
       senderName: message.sender.displayName,
       content: message.content,
     });

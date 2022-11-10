@@ -79,6 +79,7 @@ describe('TalkController (e2e)', () => {
 
     expect(res.body.messages.length).toEqual(3);
     expect(res.body.messages[0]).toEqual({
+      senderId: 1,
       senderName: 'Alice',
       content: 'test message2',
     });

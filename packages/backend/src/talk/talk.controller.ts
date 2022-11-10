@@ -60,6 +60,7 @@ export class TalkController {
     const talk = (await this.talkService.findOne(Number(talkId)))!;
     return {
       messages: talk.messages.map((message) => ({
+        senderId: message.sender.id,
         senderName: message.sender.displayName,
         content: message.content,
       })),

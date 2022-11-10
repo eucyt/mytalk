@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import FullSizeLoading from "@/components/Common/FullSizeLoading";
 import Navigation from "@/components/Common/Header/Auth/Navigation";
 import AuthLayout from "@/components/Common/Layouts/AuthLayout";
-import { User } from "@/lib/type/userType";
+import { Me } from "@/lib/type/userType";
 
 interface Props {
   children?: React.ReactNode;
-  user: User | undefined;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  user: Me | undefined;
+  setUser: React.Dispatch<React.SetStateAction<Me | undefined>>;
   title: string;
 }
 

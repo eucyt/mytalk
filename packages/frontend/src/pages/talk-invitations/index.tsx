@@ -5,10 +5,10 @@ import AuthLayoutWithHeaderFooter from "@/components/Common/Layouts/AuthLayoutWi
 import TalkInvitationList from "@/components/TalkInvitation/TalkInvitationList";
 import talkInvitationAPI from "@/lib/api/talkInvitation";
 import { TaskInvitation } from "@/lib/type/taskInvitationType";
-import { User } from "@/lib/type/userType";
+import { Me } from "@/lib/type/userType";
 
 const Index: React.FC = () => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<Me>();
   const [invitations, setInvitations] = useState<TaskInvitation[]>();
   const { getInvitedInvitations } = talkInvitationAPI;
 

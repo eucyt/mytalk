@@ -76,7 +76,11 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   getMe(@Req() req: { user: User }) {
     return {
-      user: { displayName: req.user.displayName, email: req.user.email },
+      user: {
+        id: req.user.id,
+        displayName: req.user.displayName,
+        email: req.user.email,
+      },
     };
   }
 
