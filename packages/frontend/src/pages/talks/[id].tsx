@@ -86,7 +86,7 @@ const Index = () => {
     <FullSizeLoading />
   ) : (
     <AuthLayout title="MyTalk - Message" setUser={setUser}>
-      <div className="flex h-screen flex-1 flex-col justify-between sm:p-6">
+      <div className="flex h-screen flex-1 flex-col justify-between p-2 sm:p-6">
         {/* HACK: Removing my name from member's names */}
         <TalkHeader
           talkMemberNamesWithoutMe={
