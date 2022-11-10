@@ -57,7 +57,7 @@ describe('TalkController (e2e)', () => {
     expect(res.status).toEqual(200);
 
     expect(res.body.talks.length).toEqual(3);
-    expect(res.body.talks[0].users).toEqual([{ name: 'Alice' }]);
+    expect(res.body.talks[0].users).toEqual([{ displayName: 'Alice' }]);
   });
 
   it('OK /talks (POST)', async () => {
@@ -83,7 +83,10 @@ describe('TalkController (e2e)', () => {
       senderName: 'Alice',
       content: 'test message2',
     });
-    expect(res.body.users).toEqual([{ name: 'Alice' }, { name: 'Bob' }]);
+    expect(res.body.users).toEqual([
+      { displayName: 'Alice' },
+      { displayName: 'Bob' },
+    ]);
   });
 
   it('NG /talks/:id (GET): The user is not a member in talk.', async () => {
