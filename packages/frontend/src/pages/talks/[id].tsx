@@ -10,6 +10,7 @@ import TalkHeader from "@/components/Talk/TalkHeader";
 import talkAPI from "@/lib/api/talk";
 import { Message } from "@/lib/type/talkType";
 import { Me, User } from "@/lib/type/userType";
+import { GUEST_REDIRECT_URL } from "@/lib/utils/constant";
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const Index = () => {
@@ -72,9 +73,11 @@ const Index = () => {
       if (status === 200) {
         setMessages(data.messages);
         setMembers(data.users);
+      } else if (status === 401) {
+        await router.push(GUEST_REDIRECT_URL);
       }
     })();
-  }, [getMessages, talkId]);
+  }, [getMessages, router, talkId]);
 
   useEffect(() => {
     if (isConnected && messages !== undefined) {

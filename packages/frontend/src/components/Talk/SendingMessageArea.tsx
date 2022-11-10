@@ -1,6 +1,8 @@
+import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 
 import talkAPI from "@/lib/api/talk";
+import { GUEST_REDIRECT_URL } from "@/lib/utils/constant";
 
 interface Props {
   talkId: string;
@@ -9,6 +11,7 @@ interface Props {
 const SendingMessageArea: React.FC<Props> = (props) => {
   const [message, setMessage] = useState<string>();
   const { postMessage } = talkAPI;
+  const router = useRouter();
 
   const sendMessage = useCallback(
     async (event: { preventDefault: () => void }) => {
@@ -21,11 +24,13 @@ const SendingMessageArea: React.FC<Props> = (props) => {
         );
         console.log(status);
         if (status === 201) {
-          setMessage(undefined);
+          setMessage("");
+        } else if (status === 401) {
+          await router.push(GUEST_REDIRECT_URL);
         }
       }
     },
-    [message, postMessage, props.talkId]
+    [message, postMessage, props.talkId, router]
   );
 
   return (
@@ -37,6 +42,7 @@ const SendingMessageArea: React.FC<Props> = (props) => {
               onChange={(event) => {
                 setMessage(event.target.value);
               }}
+              value={message}
               type="text"
               className="flex h-10 w-full items-center border border-none border-transparent text-sm focus:ring-0"
               placeholder="Type your message...."
