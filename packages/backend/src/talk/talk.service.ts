@@ -49,9 +49,8 @@ export class TalkService {
       },
     });
 
-    // TODO: to(room)
     // TODO: emit message crated_at
-    this.talkGateway.server.emit('newMessage', {
+    this.talkGateway.server.to(String(talkId)).emit('newMessage', {
       senderName: message.sender.displayName,
       content: message.content,
     });

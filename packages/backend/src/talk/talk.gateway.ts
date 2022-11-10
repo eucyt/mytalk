@@ -4,7 +4,6 @@ import {
   WebSocketServer,
   ConnectedSocket,
   SubscribeMessage,
-  MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
@@ -21,9 +20,10 @@ export class TalkGateway {
   server!: Server;
   constructor(private readonly authService: AuthService) {}
 
+  // TODO: サーバー側でroomに追加されることを確認する。
   @SubscribeMessage('join')
-  handleEvent(@MessageBody() data: number) {
-    console.log(data);
+  handleEvent(client: Socket, data: string) {
+    void client.join(data);
   }
 
   afterInit(server: Server) {
