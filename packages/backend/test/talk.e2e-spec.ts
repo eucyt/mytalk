@@ -8,11 +8,13 @@ import { resetDatabase } from './detabese-reset';
 describe('TalkController (e2e)', () => {
   let app: INestApplication;
   const alice = {
+    id: 1,
     email: 'test.alice@test.com',
     displayName: 'Alice',
     password: 'Password!0Alice',
   };
   const bob = {
+    id: 2,
     email: 'test.bob@test.com',
     displayName: 'Bob',
     password: 'Password!0Bob',
@@ -57,7 +59,10 @@ describe('TalkController (e2e)', () => {
     expect(res.status).toEqual(200);
 
     expect(res.body.talks.length).toEqual(3);
-    expect(res.body.talks[0].users).toEqual([{ displayName: 'Alice' }]);
+    expect(res.body.talks[0].users).toEqual([
+      { id: alice.id, displayName: 'Alice' },
+    ]);
+    expect(res.body.talks[1].latestMessage.content).toEqual('test message4');
   });
 
   it('OK /talks (POST)', async () => {

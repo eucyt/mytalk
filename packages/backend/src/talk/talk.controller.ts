@@ -41,8 +41,10 @@ export class TalkController {
       talks: talks.map((talk) => ({
         id: talk.id,
         users: talk.users.map((user) => ({
+          id: user.id,
           displayName: user.displayName,
         })),
+        latestMessage: talk.messages.slice(-1)[0] ?? undefined,
       })),
     };
   }

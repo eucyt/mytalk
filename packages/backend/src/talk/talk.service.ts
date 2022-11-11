@@ -26,7 +26,7 @@ export class TalkService {
       where: {
         users: { some: { id: userId } },
       },
-      include: { users: true },
+      include: { users: true, messages: true },
     });
   }
 

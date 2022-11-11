@@ -8,7 +8,7 @@ import { TalkListItem } from "@/lib/type/talkType";
 
 interface Props {
   talks?: TalkListItem[];
-  username?: string;
+  myId?: number;
 }
 const TalkList: React.FC<Props> = (props) => {
   return (
@@ -25,14 +25,7 @@ const TalkList: React.FC<Props> = (props) => {
       items={
         props.talks?.length !== 0 ? (
           props.talks?.map((talk, i) => {
-            return (
-              <TaskListItem
-                id={talk.id}
-                talkMemberNames={talk.users
-                  .map((user) => user.displayName)
-                  .filter((v) => v !== props.username)}
-              />
-            );
+            return <TaskListItem talk={talk} myId={props.myId} />;
           })
         ) : (
           <Item>
