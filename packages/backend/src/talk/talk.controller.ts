@@ -43,6 +43,7 @@ export class TalkController {
         users: talk.users.map((user) => ({
           displayName: user.displayName,
         })),
+        latestMessage: talk.messages.slice(-1)[0] ?? undefined,
       })),
     };
   }
