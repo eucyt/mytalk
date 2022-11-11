@@ -29,7 +29,7 @@ const Index = () => {
       title="MyTalk - Talk"
     >
       <Content>
-        <TalkList talks={talks} username={user?.displayName} />
+        <TalkList talks={talks} myId={user?.id} />
       </Content>
     </AuthLayoutWithHeaderFooter>
   );
