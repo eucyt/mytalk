@@ -3,7 +3,7 @@ import { User } from "@/lib/type/userType";
 export interface TalkListItem {
   id: number;
   users: User[];
-  latestMessage: Message;
+  latestMessage?: Message;
 }
 
 export interface Message {

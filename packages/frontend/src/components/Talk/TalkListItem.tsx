@@ -27,7 +27,7 @@ const TaskListItem: React.VFC<Props> = (props) => {
             : "No Member"}
         </div>
         <div className="max-w-full  truncate text-xs">
-          {props.talk.latestMessage.content}
+          {props.talk.latestMessage?.content}
         </div>
       </div>
       {/*<div className="ml-2 mb-1 shrink-0 self-end">*/}
